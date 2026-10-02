@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="Model.Product" %>
+<%@ page import="ui.ViewProduct" %>
 <html>
 <head>
     <title>All Products</title>
@@ -40,12 +41,12 @@
     <p class="error"><%= error %></p>
 <%
     } else {
-        List<Product> products = (List<Product>) request.getAttribute("products");
+        List<ViewProduct> products = (List<ViewProduct>) request.getAttribute("products");
         if (products != null && !products.isEmpty()) {
 %>
     <div class="product-grid">
 <%
-            for (Product p : products) {
+            for (ViewProduct p : products) {
 %>
         <div class="card">
             <h2><%= p.getName() %></h2>

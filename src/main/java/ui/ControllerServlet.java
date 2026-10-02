@@ -4,6 +4,7 @@ import Model.Product;
 import Util.DBConnection;
 import Util.exeptions.*;
 
+import bo.Facade;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,8 +23,14 @@ public class ControllerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            List<ViewProduct> products = Facade.getAllProducts();
+            request.setAttribute("products", products);
+        } catch (SQLException e) {
+            request.setAttribute("error", e.getSQLState());
+        }
 
-        List<Product> products = new ArrayList<>();
+        /*List<Product> products = new ArrayList<>();
 
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement st = conn.prepareStatement(
@@ -45,9 +52,7 @@ public class ControllerServlet extends HttpServlet {
         } catch (SQLException | ConnectionFailExeption e){
             e.printStackTrace();
             request.setAttribute("Error", "Database error: " + e.getMessage());
-        }
-
-        request.setAttribute("products", products);
+        }*/
         request.getRequestDispatcher("/test-product.jsp").forward(request, response);
     }
 }

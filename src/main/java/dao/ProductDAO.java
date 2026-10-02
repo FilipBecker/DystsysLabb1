@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ProductDAO {
 
-    public List<Product> findAll() throws ConnectionFailExeption, SQLException{
+    public static List<Product> findAll() throws ConnectionFailExeption, SQLException{
         List<Product> products = new ArrayList<>();
 
         try(Connection conn = DBConnection.getConnection();
