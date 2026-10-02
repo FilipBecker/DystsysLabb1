@@ -1,4 +1,4 @@
-package Service;
+package bo;
 
 import Model.Product;
 import Util.exeptions.ConnectionFailExeption;
