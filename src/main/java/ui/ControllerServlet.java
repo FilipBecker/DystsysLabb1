@@ -1,4 +1,4 @@
-package Controller;
+package ui;
 
 import Model.Product;
 import Util.DBConnection;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/test-product")
-public class TestProductServlet extends HttpServlet {
+public class ControllerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
