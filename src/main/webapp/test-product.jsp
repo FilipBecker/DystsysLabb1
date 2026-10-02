@@ -50,8 +50,10 @@
         <div class="card">
             <h2><%= p.getName() %></h2>
             <p><%= p.getDescription() %></p>
+            <p class="ID">Id: <%= String.format("%d", p.getId()) %> </p>
             <p class="price"><%= String.format("%.2f", p.getPrice()) %> $</p>
             <p class="stock">In storage: <%= p.getStock() %> </p>
+
         </div>
 <%
             }
