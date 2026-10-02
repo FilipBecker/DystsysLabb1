@@ -27,6 +27,10 @@
 </head>
 <body>
 
+    <a href="<%= request.getContextPath() %>/" class="back-btn">
+        ← Back to the start page
+     </a>
+
 <h1>All the products in the webshop</h1>
 
 <%
