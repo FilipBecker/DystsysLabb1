@@ -7,6 +7,13 @@ public class Product {
     private double price;
     private int stock;
 
+    protected Product(int id, String name, String description, double price, int stock) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
+    }
 
     public int getId() {
         return id;

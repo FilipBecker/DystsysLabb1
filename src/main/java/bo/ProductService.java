@@ -9,13 +9,12 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class ProductService {
-    private final ProductDAO productDAO = new ProductDAO();
 
     public List<Product> getAllProducts() throws ConnectionFailExeption, SQLException {
-        return productDAO.findAll();
+        return ProductDAO.findAll();
     }
 
     public Product getProductById(int id) throws ConnectionFailExeption, SQLException {
-        return productDAO.findById(id);
+        return ProductDAO.findById(id);
     }
 }
