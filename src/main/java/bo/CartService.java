@@ -7,7 +7,7 @@ import java.util.List;
 
 public class CartService {
 
-    public List<CartItem> addToCart(List<CartItem> cart, Product product, int quantity){
+    public static List<CartItem> addToCart(List<CartItem> cart, Product product, int quantity){
         if(cart == null){
             cart = new ArrayList<>();
         }
@@ -29,7 +29,7 @@ public class CartService {
         return cart;
     }
 
-    public double getTotal(List<CartItem> cart){
+    public static double getTotal(List<CartItem> cart){
         if(cart == null) return 0;
         return cart.stream().mapToDouble(CartItem::getSubtotal).sum();
     }

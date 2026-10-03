@@ -21,8 +21,9 @@ public class ControllerServlet extends HttpServlet {
             List<ViewProduct> products = Facade.getAllProducts();
             request.setAttribute("products", products);
         } catch (SQLException e) {
-            request.setAttribute("error", e.getSQLState());
+            request.setAttribute("error", e.getMessage());
         }
         request.getRequestDispatcher("/test-product.jsp").forward(request, response);
     }
 }
+

@@ -1,11 +1,14 @@
 package bo;
 
+import Model.CartItem;
 import Model.Product;
 import Util.exeptions.ConnectionFailExeption;
 import dao.ProductDAO;
+import ui.ViewCartItem;
 import ui.ViewItem;
 import ui.ViewProduct;
 
+import javax.swing.text.AttributeSet;
 import javax.swing.text.View;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,15 +25,6 @@ public class Facade {
 
     public static List<ViewProduct> getAllProducts() throws SQLException {
         return toViewProductList(ProductDAO.findAll());
-        /*List<Product> products = ProductDAO.findAll();
-        if (!products.isEmpty()) {
-            List<ViewProduct> viewProducts = new ArrayList<>();
-            for (Product product : products) {
-                viewProducts.add(new ViewProduct(product));
-            }
-            return viewProducts;
-        }
-        return null;*/
 
     }
 
@@ -42,14 +36,6 @@ public class Facade {
 
     public static List<ViewProduct> getProductByName(String name) throws SQLException{
         return toViewProductList(ProductDAO.findByName(name));
-        /*
-        List<Product> products = ProductDAO.findByName(name);
-        if(!products.isEmpty()){
-            List<ViewProduct> viewProducts = new ArrayList<>();
-            for (Product product : products) viewProducts.add(new ViewProduct(product));
-            return viewProducts;
-        }
-        return null;*/
     }
 
     private static List<ViewProduct> toViewProductList(List<Product> products) {
@@ -64,4 +50,50 @@ public class Facade {
         return viewProducts;
     }
 
+    public static List<ViewCartItem> getCartView(List<CartItem> cart){
+        if(cart == null ||cart.isEmpty()) return new ArrayList<>();
+
+        List<ViewCartItem> viewItems = new ArrayList<>();
+        for(CartItem item : cart){
+            ViewProduct viewProduct = new ViewProduct(item.getProduct());
+            viewItems.add(new ViewCartItem(viewProduct, item.getQuantity()));
+        }
+
+        return viewItems;
+    }
+
+    public static List<CartItem> addToCart(List<CartItem> cart, int id, int quantity) throws SQLException{
+        Product product = ProductDAO.findById(id);
+
+        if (product == null) {
+            throw new SQLException("Product not found.");
+        }
+
+        int currentQuantity = 0;
+
+        for (CartItem item : cart) {
+            if (item.getProduct().getId() == product.getId()) {
+                currentQuantity = item.getQuantity();
+                break;
+            }
+        }
+
+        if (currentQuantity + quantity > product.getStock()) {
+            throw new SQLException(
+                    "Not enough stock. Only "
+                            + (product.getStock() - currentQuantity)
+                            + " more available."
+            );
+        }
+
+        return CartService.addToCart(cart, product, quantity);
+    }
+
+
+    public static double getTotal(List<CartItem> cart) {
+        if (cart == null || cart.isEmpty()) {
+            return 0;
+        }
+        return CartService.getTotal(cart);
+    }
 }

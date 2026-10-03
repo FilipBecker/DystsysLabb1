@@ -12,9 +12,8 @@ import java.sql.SQLException;
 public class UserDAO {
 
     public User findByUserNameAndPassword(String username, String password) throws ConnectionFailExeption, SQLException{
-
-        try(Connection conn = DBConnection.getConnection();
-            PreparedStatement statement = conn.prepareStatement(
+        Connection conn = DBConnection.getConnection();
+        try(PreparedStatement statement = conn.prepareStatement(
                     "SELECT id, username, role, email FROM users WHERE username = ? AND password = ?"
             )){
 

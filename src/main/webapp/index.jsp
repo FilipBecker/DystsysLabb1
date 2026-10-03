@@ -31,6 +31,9 @@
     <a href="<%= request.getContextPath() %>/test-product">
         Show products
     </a>
+    <a href="<%= request.getContextPath() %>/cart">
+            Show cart
+    </a>
 
 </body>
 </html>
