@@ -20,8 +20,8 @@ public class ProductDAO extends Product{
     public static List<Product> findAll() throws ConnectionFailExeption, SQLException{
         List<Product> products = new ArrayList<>();
 
-        try(Connection conn = DBConnection.getConnection();
-            PreparedStatement statement = conn.prepareStatement(
+        Connection conn = DBConnection.getConnection();
+        try(PreparedStatement statement = conn.prepareStatement(
                     "SELECT id, name, description, price, stock FROM products");
             ResultSet resultSet = statement.executeQuery()) {
 
@@ -38,8 +38,8 @@ public class ProductDAO extends Product{
     }
 
     public static Product findById(int id) throws ConnectionFailExeption, SQLException{
-        try(Connection conn = DBConnection.getConnection();
-            PreparedStatement statement = conn.prepareStatement(
+        Connection conn = DBConnection.getConnection();
+        try(PreparedStatement statement = conn.prepareStatement(
                     "SELECT id, name, description, price, stock FROM products WHERE id = ?"
             )){
             statement.setInt(1, id);
@@ -61,11 +61,11 @@ public class ProductDAO extends Product{
     public static List<Product> findByName(String name) throws ConnectionFailExeption, SQLException{
         List<Product> products = new ArrayList<>();
 
-        try(Connection conn = DBConnection.getConnection();
-            PreparedStatement statement = conn.prepareStatement(
+        Connection conn = DBConnection.getConnection();
+        try(PreparedStatement statement = conn.prepareStatement(
                     "SELECT id, name, description, price, stock FROM products WHERE name = ?"
             )){
-            statement.setString(2, name);
+            statement.setString(1, name);
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {

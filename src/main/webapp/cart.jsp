@@ -1,9 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="ui.ViewProduct" %>
+<%@ page import="ui.ViewCartItem" %>
 <html>
 <head>
-    <title>All Products</title>
+    <title>Cart</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
         h1 { color: #333; }
@@ -31,7 +32,7 @@
         ← Back to the start page
      </a>
 
-<h1>All the products in the webshop</h1>
+<h1>All your items in the cart</h1>
 
 <%
     String error = (String) request.getAttribute("error");
@@ -40,35 +41,37 @@
     <p class="error"><%= error %></p>
 <%
     } else {
-        List<ViewProduct> products = (List<ViewProduct>) request.getAttribute("products");
-        if (products != null && !products.isEmpty()) {
+        List<ViewCartItem> cart = (List<ViewCartItem>) request.getAttribute("cart");
+        Double total = (Double) request.getAttribute("total");
+        if (cart != null && !cart.isEmpty()) {
+
 %>
-    <div class="product-grid">
+    <p style="font-size: 1.3rem; font-weight: bold; margin-top: 20px;">
+        Total: <%= String.format("%.2f", total) %> $
+    </p>
+    <ul class="cart-list">
 <%
-            for (ViewProduct p : products) {
+            for (ViewCartItem p : cart) {
 %>
-        <div class="card">
-            <h2><%= p.getName() %></h2>
-            <p><%= p.getDescription() %></p>
-            <p class="ID">Id: <%= String.format("%d", p.getId()) %> </p>
-            <p class="price"><%= String.format("%.2f", p.getPrice()) %> $</p>
-            <p class="stock">In storage: <%= p.getStock() %> </p>
-
-            <form method="post" action="<%= request.getContextPath() %>/cart" >
-                <input type="hidden" name="id" value= "<%= p.getId() %>">
-                <input type="number" name="quantity" value="1" min="1" max="<%= p.getStock() %>" >
-                <button type="submit"> add to cart </button>
-            </form>
-
-        </div>
+        <li class="cart-item">
+            <span class="product-name"><%= p.getName() %></span>
+            <span>Quantity: <%= p.getQuantity() %></span>
+            <span class="price">
+                <%= String.format("%.2f", p.getSubtotal()) %> $
+            </span>
+        </li>
 <%
             }
 %>
     </div>
+    <form action="cart" method="post">
+        <input type="hidden" name="action" value="clear">
+        <button type="submit">Clear Cart</button>
+    </form>
 <%
         } else {
 %>
-    <p>No products found.</p>
+    <p>Cart empty.</p>
 <%
         }
     }
