@@ -23,10 +23,9 @@ public class ProductDAO extends Product{
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement statement = conn.prepareStatement(
                     "SELECT id, name, description, price, stock FROM products");
-            ResultSet resultSet = statement.executeQuery()){
+            ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
-
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
                 String description = resultSet.getString("description");
@@ -46,6 +45,7 @@ public class ProductDAO extends Product{
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
 
+
             if (resultSet.next()) {
                 String name = resultSet.getString("name");
                 String description = resultSet.getString("description");
@@ -53,11 +53,14 @@ public class ProductDAO extends Product{
                 int stock = resultSet.getInt("stock");
                 return new ProductDAO(id, name, description, price, stock);
             }
+
             return null;
         }
     }
 
-    public static Product findByName(String name) throws ConnectionFailExeption, SQLException{
+    public static List<Product> findByName(String name) throws ConnectionFailExeption, SQLException{
+        List<Product> products = new ArrayList<>();
+
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement statement = conn.prepareStatement(
                     "SELECT id, name, description, price, stock FROM products WHERE name = ?"
@@ -65,14 +68,16 @@ public class ProductDAO extends Product{
             statement.setString(2, name);
             ResultSet resultSet = statement.executeQuery();
 
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String description = resultSet.getString("description");
                 double price = resultSet.getDouble("price");
                 int stock = resultSet.getInt("stock");
-                return new ProductDAO(id, name, description, price, stock);
+                products.add(new ProductDAO(id, name, description, price, stock));
             }
-            return null;
         }
+        return products;
     }
+
+
 }
