@@ -32,5 +32,9 @@
         Show products
     </a>
 
+
+    <a href="<%= request.getContextPath() %>/login.jsp">
+        Login
+    </a>
 </body>
 </html>

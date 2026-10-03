@@ -1,5 +1,7 @@
 package bo;
 
+import Enums.Privlige;
+import Exeptions.NoSuchUserExeption;
 import Model.Product;
 import Util.exeptions.ConnectionFailExeption;
 import dao.ProductDAO;
@@ -62,6 +64,11 @@ public class Facade {
             viewProducts.add(new ViewProduct(product));
         }
         return viewProducts;
+    }
+
+    public static Privlige validateUser(String username, String password) throws NoSuchUserExeption {
+        if (username == null || password == null) return null;
+        return Privlige.COSTUMER;
     }
 
 }
