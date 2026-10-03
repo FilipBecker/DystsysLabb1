@@ -1,4 +1,5 @@
 package dao;
+import Enums.Privlige;
 import Model.User;
 import Util.DBConnection;
 import Util.exeptions.ConnectionFailExeption;
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 
 public class UserDAO {
 
-    public User findByUserNameAndPassword(String username, String password) throws ConnectionFailExeption, SQLException{
+    public static User findByUserNameAndPassword(String username, String password) throws ConnectionFailExeption, SQLException{
         Connection conn = DBConnection.getConnection();
         try(PreparedStatement statement = conn.prepareStatement(
                     "SELECT id, username, role, email FROM users WHERE username = ? AND password = ?"
@@ -25,7 +26,13 @@ public class UserDAO {
                 User user = new User();
                 user.setId(resultSet.getInt("id"));
                 user.setUsername(resultSet.getString("username"));
-                user.setRole(resultSet.getString("role"));
+                user.setRole(switch (resultSet.getString("role")) {
+                    case "ADMIN" -> Privlige.ADMIN;
+                    case "WAREHOUSE" -> Privlige.WAREHOUSE;
+                    case "CUSTOMER" -> Privlige.COSTUMER;
+                            default -> throw new SQLException("User has improper role: "+ resultSet.getString("role"));
+                        }
+                        );
                 user.setEmail(resultSet.getString("email"));
                 return user;
             }

@@ -6,6 +6,7 @@ import Model.CartItem;
 import Model.Product;
 import Util.exeptions.ConnectionFailExeption;
 import dao.ProductDAO;
+import dao.UserDAO;
 import ui.ViewCartItem;
 import ui.ViewItem;
 import ui.ViewProduct;
@@ -99,9 +100,9 @@ public class Facade {
         return CartService.getTotal(cart);
     }
 
-    public static Privlige validateUser(String username, String password) throws NoSuchUserExeption {
-        if (username == null || password == null) return null;
-        return Privlige.COSTUMER;
+    //This should never return null
+    public static Privlige validateUser(String username, String password) throws NoSuchUserExeption, SQLException {
+        return UserService.login(username, password).getRole();
     }
 
 }

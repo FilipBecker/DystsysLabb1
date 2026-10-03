@@ -26,6 +26,13 @@
 <body>
 
     <h1>Welcome to the webshop version 0.1</h1>
+    <% String userName = (String) session.getAttribute("userName");
+    if (userName != null) {
+        %> <p>Loged in as: <%= userName %></p>
+    <%} else {
+        %> <p>Not loged in</p>
+    <%}%>
+
     <p>Click on the button to see all the products in storage.</p>
 
     <a href="<%= request.getContextPath() %>/test-product">
