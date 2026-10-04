@@ -131,4 +131,18 @@ public class Facade {
         }
         return viewUsers;
     }
+
+    public static void addUser(String userName, String password, String role, String email) throws IllegalArgumentException, SQLException {
+        if (userName == null || userName.isEmpty()) {
+            throw new IllegalArgumentException("Invalid username: " +userName);
+        } else if (password == null || password.isEmpty()) {
+            throw new IllegalArgumentException("Invalid password:" +password);
+        } else if (role == null || role.isEmpty() || (!role.equals("WAREHOUSE") && !role.equals("CUSTOMER"))) {
+            throw new IllegalArgumentException("Invalid role");
+        }
+
+        Privilege privilege = Privilege.valueOf(role);
+        UserDAO.add(userName, password, privilege, email);
+
+    }
 }

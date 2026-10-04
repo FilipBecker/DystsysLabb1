@@ -42,4 +42,31 @@ public class UserServlet extends HttpServlet {
                 break;
         }
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Privilege Privilege = LoginServlet.validateSessionUser(req, resp);
+        switch (Privilege) {
+            case null:
+                return;
+            case ADMIN:
+                String userName = req.getParameter("userName");
+                String password = req.getParameter("password");
+                String role = req.getParameter("role");
+                String email = req.getParameter("email");
+                try {
+                    Facade.addUser(userName, password, role, email);
+
+                } catch (IllegalArgumentException | SQLException e) {
+                    req.setAttribute("error", e.getMessage());
+                }
+
+                req.getRequestDispatcher("/userAdmin.jsp").forward(req, resp);
+                break;
+            default:
+                req.setAttribute("error", "Insufficient privilege");
+                req.getRequestDispatcher("/index.jsp").forward(req, resp);
+                break;
+        }
+    }
 }

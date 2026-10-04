@@ -87,5 +87,21 @@
     </table>
     <%}%>
 
+<p>Add user</p>
+<form method="post" action="<%= request.getContextPath() %>/Users">
+    <label for="Username">Username</label>
+    <input type="text" id="Username" name="userName" value=""><br>
+    <label for="Password">Password</label>
+    <input type="text" id="Password" name="password" value=""><br>
+
+    <input type="radio" id="Warehouse" name="role" value="WAREHOUSE">
+    <label for="Warehouse">Warehouse</label><br>
+    <input type="radio" id="Customer" name="role" value="CUSTOMER">
+    <label for="Customer">Customer</label><br>
+
+    <label for="Email">Email</label>
+    <input type="text" id="Email" name="email" value=""><br>
+    <input type="submit" value="Create user">
+</form>
 </body>
 </html>

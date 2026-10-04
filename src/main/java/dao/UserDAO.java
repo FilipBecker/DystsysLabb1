@@ -32,7 +32,7 @@ public class UserDAO extends User{
                 Privilege role = switch (resultSet.getString("role")) {
                     case "ADMIN" -> Privilege.ADMIN;
                     case "WAREHOUSE" -> Privilege.WAREHOUSE;
-                    case "CUSTOMER" -> Privilege.COSTUMER;
+                    case "CUSTOMER" -> Privilege.CUSTOMER;
                             default -> throw new SQLException("User has improper role: "+ resultSet.getString("role"));
                         };
                 String email = resultSet.getString("email");
@@ -56,13 +56,28 @@ public class UserDAO extends User{
                 Privilege role = switch (resultSet.getString("role")) {
                     case "ADMIN" -> Privilege.ADMIN;
                     case "WAREHOUSE" -> Privilege.WAREHOUSE;
-                    case "CUSTOMER" -> Privilege.COSTUMER;
+                    case "CUSTOMER" -> Privilege.CUSTOMER;
                     default -> throw new SQLException("User has improper role: "+ resultSet.getString("role"));
                 };
                 String email = resultSet.getString("email");
                 users.add(new UserDAO(id, username, role, email));
             }
             return users;
+        }
+    }
+
+    public static void add(String userName, String password, Privilege role, String email) throws ConnectionFailExeption, SQLException {
+        Connection conn = DBConnection.getConnection();
+
+        try (PreparedStatement statement = conn.prepareStatement(
+                    "INSERT INTO users (username, password, role, email)" +
+                            "VALUES(?, ?, ?, ?)")) {
+            statement.setString(1, userName);
+            statement.setString(2, password);
+            statement.setString(3, role.name());
+            statement.setString(4, email);
+
+            statement.executeUpdate();
         }
     }
 }
