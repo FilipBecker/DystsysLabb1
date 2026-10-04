@@ -10,6 +10,8 @@ import ui.ViewCartItem;
 import ui.ViewItem;
 import ui.ViewProduct;
 import Model.User;
+import Model.Category;
+import dao.CategoryDAO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -112,6 +114,77 @@ public class Facade {
             throws SQLException {
 
         OrderDAO.createOrder(userId, cart);
+    }
+
+    public static List<Category> getAllCategories() throws SQLException {
+        return CategoryDAO.findAll();
+    }
+
+    public static Category getCategoryById(int id) throws SQLException {
+        return CategoryDAO.findById(id);
+    }
+
+    public static Category getCategoryByName(String name) throws SQLException {
+        return CategoryDAO.findByName(name);
+    }
+
+    public static void createCategory(String name) throws SQLException{
+        if(name == null || name.trim().isEmpty()) throw new SQLException("Category name can't be empty");
+
+        Category category = new Category();
+        category.setName(name.trim());
+    
+        CategoryDAO.createCategory(category);
+    }
+    
+    public static void updateCategory(int id, String name) throws SQLException{
+        if(name == null || name.trim().isEmpty()) throw new SQLException("Category name can't be empty");
+
+        Category category = new Category();
+        category.setId(id);
+        category.setName(name);
+        
+        CategoryDAO.updateCategory(category);
+    }
+    
+    public static void createProduct(String name, String description, double price, int stock, int categoryId) throws SQLException{
+        validateProduct(name, price, stock);
+
+        Product product = new Product(0, name.trim(), description, price, stock, categoryId);
+
+        ProductDAO.createProduct(product);
+
+    }
+
+    public static void updateProduct(int id, String name, String description, double price, int stock, int categoryId) throws SQLException{
+        validateProduct(name, price, stock);
+
+        Product product = new Product(
+                id,
+                name.trim(),
+                description,
+                price,
+                stock,
+                categoryId
+        );
+
+        ProductDAO.updateProduct(product);
+    }
+
+    private static void validateProduct(String name, double price, int stock)
+            throws SQLException {
+
+        if (name == null || name.trim().isEmpty()) {
+            throw new SQLException("Product name cannot be empty.");
+        }
+
+        if (price < 0) {
+            throw new SQLException("Price cannot be negative.");
+        }
+
+        if (stock < 0) {
+            throw new SQLException("Stock cannot be negative.");
+        }
     }
 
 }
