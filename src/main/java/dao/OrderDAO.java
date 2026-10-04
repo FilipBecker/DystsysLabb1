@@ -1,16 +1,24 @@
 package dao;
 
 import Model.CartItem;
+import Model.Order;
+import Model.OrderLine;
 import Util.DBConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
-public class OrderDAO {
+public class OrderDAO extends Order {
+
+    public OrderDAO() {
+        super();
+    }
+
+    public OrderDAO(int id, int userId, Timestamp orderDate, String status) {
+        super(id, userId,orderDate, status);
+    }
 
     public static void createOrder(int userId, List<CartItem> cart) throws SQLException {
         if (cart == null || cart.isEmpty()) throw new SQLException("Cart is empty");
@@ -76,5 +84,135 @@ public class OrderDAO {
             conn.setAutoCommit(true);
         }
 
+    }
+
+    public static List<OrderDAO> findAllOrders()
+            throws SQLException {
+
+        List<OrderDAO> orders = new ArrayList<>();
+
+        Connection conn = DBConnection.getConnection();
+        try (PreparedStatement statement =
+                     conn.prepareStatement("SELECT id, user_id, order_date, status " +
+                             "FROM orders " +
+                             "ORDER BY order_date DESC");
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+
+                OrderDAO order = new OrderDAO(
+                        resultSet.getInt("id"),
+                        resultSet.getInt("user_id"),
+                        resultSet.getTimestamp("order_date"),
+                        resultSet.getString("status")
+                );
+
+                orders.add(order);
+            }
+        }
+
+        return orders;
+    }
+    public static void packOrder(int orderId)
+            throws SQLException {
+
+        Connection conn = DBConnection.getConnection();
+
+        try (PreparedStatement statement =
+                     conn.prepareStatement("UPDATE orders " +
+                             "SET status = 'PACKED' " +
+                             "WHERE id = ? " +
+                             "AND status = 'NEW'")) {
+
+            statement.setInt(1, orderId);
+
+            int rowsUpdated = statement.executeUpdate();
+
+            if (rowsUpdated == 0) {
+                throw new SQLException(
+                        "Order could not be packed.");
+            }
+        }
+    }
+
+    public static List<OrderDAO> findOrdersToPack()
+            throws SQLException {
+
+        List<OrderDAO> orders = new ArrayList<>();
+
+        Connection conn = DBConnection.getConnection();
+        try (PreparedStatement statement =
+                     conn.prepareStatement("SELECT id, user_id, order_date, status " +
+                             "FROM orders " +
+                             "WHERE status = 'NEW' " +
+                             "ORDER BY order_date ASC");
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+
+                OrderDAO order = new OrderDAO(
+                        resultSet.getInt("id"),
+                        resultSet.getInt("user_id"),
+                        resultSet.getTimestamp("order_date"),
+                        resultSet.getString("status")
+                );
+
+                orders.add(order);
+            }
+        }
+
+        return orders;
+    }
+
+    public static OrderDAO findById(int orderId) throws SQLException{
+        Connection conn = DBConnection.getConnection();
+
+        try(PreparedStatement statement = conn.prepareStatement("SELECT id, user_id, order_date, status " +
+                "FROM orders " +
+                "WHERE id = ?")){
+            statement.setInt(1, orderId);
+
+            try(ResultSet resultSet = statement.executeQuery()){
+                if(resultSet.next()){
+                    return new OrderDAO(
+                            resultSet.getInt("id"),
+                            resultSet.getInt("user_id"),
+                            resultSet.getTimestamp("order_date"),
+                            resultSet.getString("status")
+                    );
+                }
+            }
+        }
+        return null;
+    }
+
+
+    public static List<OrderDAO> findPackedOrders() throws SQLException {
+
+        List<OrderDAO> orders = new ArrayList<>();
+        Connection conn = DBConnection.getConnection();
+
+
+        try (PreparedStatement statement = conn.prepareStatement(
+                "SELECT id, user_id, order_date, status " +
+                "FROM orders " +
+                "WHERE status = 'PACKED' " +
+                "ORDER BY order_date DESC");
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+
+                OrderDAO order = new OrderDAO(
+                        resultSet.getInt("id"),
+                        resultSet.getInt("user_id"),
+                        resultSet.getTimestamp("order_date"),
+                        resultSet.getString("status")
+                );
+
+                orders.add(order);
+            }
+        }
+
+        return orders;
     }
 }
