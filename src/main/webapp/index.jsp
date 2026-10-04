@@ -26,12 +26,12 @@
 </head>
 <body>
 
-    <h1>Welcome to the webshop version 0.1</h1>
+    <h1>Welcome to the webshop version 0.2</h1>
     <% String userName = (String) session.getAttribute("userName");
     if (userName != null) {
-        %> <p>Loged in as: <%= userName %></p>
+        %> <p>Logged in as: <%= userName %></p>
     <%} else {
-        %> <p>Not loged in</p>
+        %> <p>Not logged in</p>
     <%}%>
 
     <%
@@ -51,6 +51,11 @@
     <a href="<%= request.getContextPath() %>/cart">
             Show cart
     </a>
+
+
+    <a href="<%= request.getContextPath() %>/admin">
+                Admin
+     </a>
 
 
     <a href="<%= request.getContextPath() %>/login.jsp">

@@ -25,11 +25,19 @@ public class LoginServlet extends HttpServlet {
         User user = validateUser(req, resp, userName, password);
         if (user == null) return;
 
+        Privilege privilege = validateUserPrivilege(req, resp, userName, password);
+
+        if (privilege == null) {
+            return;
+        }
+
         HttpSession session = req.getSession();
 
         session.setAttribute("userId", user.getId());
         session.setAttribute("userName", userName);
         session.setAttribute("password", password);
+        session.setAttribute("privilege", privilege);
+
 
         req.getRequestDispatcher("/index.jsp").forward(req, resp);
     }

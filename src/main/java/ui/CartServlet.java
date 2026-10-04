@@ -2,11 +2,9 @@ package ui;
 
 import Model.CartItem;
 import Model.User;
-import dao.OrderDAO;
 import Model.Product;
 import bo.CartService;
 import bo.Facade;
-import dao.ProductDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -80,7 +78,7 @@ public class CartServlet extends HttpServlet {
             }
 
             try{
-                OrderDAO.createOrder(userId, cart);
+                Facade.createOrder(userId, cart);
 
                 session.removeAttribute("cart");
                 session.setAttribute("message", "Order placed successfully.");
