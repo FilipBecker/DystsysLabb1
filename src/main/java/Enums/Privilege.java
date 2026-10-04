@@ -1,5 +1,5 @@
 package Enums;
 
-public enum Privlige {
+public enum Privilege {
     ADMIN, WAREHOUSE, COSTUMER
 }

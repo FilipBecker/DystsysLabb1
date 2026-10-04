@@ -1,21 +1,18 @@
 package bo;
 
-import Enums.Privlige;
+import Enums.Privilege;
 import Exeptions.NoSuchUserExeption;
 import Model.CartItem;
 import Model.Product;
-import Util.exeptions.ConnectionFailExeption;
+import dao.OrderDAO;
 import dao.ProductDAO;
-import dao.UserDAO;
 import ui.ViewCartItem;
 import ui.ViewItem;
 import ui.ViewProduct;
+import Model.User;
 
-import javax.swing.text.AttributeSet;
-import javax.swing.text.View;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -101,8 +98,20 @@ public class Facade {
     }
 
     //This should never return null
-    public static Privlige validateUser(String username, String password) throws NoSuchUserExeption, SQLException {
+    public static Privilege validateUser(String username, String password) throws NoSuchUserExeption, SQLException {
         return UserService.login(username, password).getRole();
+    }
+
+    public static User getUser(String username, String password)
+            throws NoSuchUserExeption, SQLException {
+
+        return UserService.login(username, password);
+    }
+
+    public static void placeOrder(int userId, List<CartItem> cart)
+            throws SQLException {
+
+        OrderDAO.createOrder(userId, cart);
     }
 
 }

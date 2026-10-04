@@ -1,10 +1,9 @@
 package dao;
-import Enums.Privlige;
+import Enums.Privilege;
 import Model.User;
 import Util.DBConnection;
 import Util.exeptions.ConnectionFailExeption;
 
-import java.awt.image.DataBufferDouble;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,9 +26,9 @@ public class UserDAO {
                 user.setId(resultSet.getInt("id"));
                 user.setUsername(resultSet.getString("username"));
                 user.setRole(switch (resultSet.getString("role")) {
-                    case "ADMIN" -> Privlige.ADMIN;
-                    case "WAREHOUSE" -> Privlige.WAREHOUSE;
-                    case "CUSTOMER" -> Privlige.COSTUMER;
+                    case "ADMIN" -> Privilege.ADMIN;
+                    case "WAREHOUSE" -> Privilege.WAREHOUSE;
+                    case "CUSTOMER" -> Privilege.COSTUMER;
                             default -> throw new SQLException("User has improper role: "+ resultSet.getString("role"));
                         }
                         );

@@ -30,7 +30,7 @@
 
     <a href="<%= request.getContextPath() %>/" class="back-btn">
         ← Back to the start page
-     </a>
+    </a>
 
 <h1>All your items in the cart</h1>
 
@@ -63,15 +63,26 @@
 <%
             }
 %>
+
     </div>
+    <a href="<%= request.getContextPath() %>/test-product">
+                Show products
+     </a>
     <form action="cart" method="post">
         <input type="hidden" name="action" value="clear">
         <button type="submit">Clear Cart</button>
+    </form>
+    <form action="<%= request.getContextPath() %>/cart" method="post">
+        <input type="hidden" name="action" value="placeOrder">
+        <button type="submit">Place Order</button>
     </form>
 <%
         } else {
 %>
     <p>Cart empty.</p>
+    <a href="<%= request.getContextPath() %>/test-product">
+                Show products
+    </a>
 <%
         }
     }

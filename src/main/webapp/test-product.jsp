@@ -61,11 +61,16 @@
             </form>
 
         </div>
+
 <%
             }
 %>
+        <a href="<%= request.getContextPath() %>/cart">
+                    Show cart
+        </a>
     </div>
 <%
+
         } else {
 %>
     <p>No products found.</p>
