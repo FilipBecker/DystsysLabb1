@@ -25,9 +25,8 @@ public class AdminServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         if (!hasAdminAccess(req)) {
-            resp.sendError(HttpServletResponse.SC_FORBIDDEN,
-                    "You do not have permission to access this page.");
-            return;
+            req.setAttribute("error", "Insufficient privilege");
+            req.getRequestDispatcher("/index.jsp").forward(req, resp);
         }
 
         try{
@@ -48,9 +47,8 @@ public class AdminServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         if (!hasAdminAccess(req)) {
-            resp.sendError(HttpServletResponse.SC_FORBIDDEN,
-                    "You do not have permission to perform this action.");
-            return;
+            req.setAttribute("error", "Insufficient privilege");
+            req.getRequestDispatcher("/index.jsp").forward(req, resp);
         }
 
         String action = req.getParameter("action");

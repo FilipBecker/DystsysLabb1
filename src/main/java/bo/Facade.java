@@ -188,6 +188,11 @@ public class Facade {
         ProductDAO.updateProduct(product);
     }
 
+    public static void createOrder(int userId, List<CartItem> cart) throws SQLException {
+
+        OrderDAO.createOrder(userId, cart);
+    }
+
     private static void validateProduct(String name, double price, int stock)
             throws SQLException {
 
