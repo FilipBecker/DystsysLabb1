@@ -23,7 +23,6 @@ public class LoginServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         User user = validateUser(req, resp, userName, password);
-
         if (user == null) return;
 
         Privilege privilege = validateUserPrivilege(req, resp, userName, password);

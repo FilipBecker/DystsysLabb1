@@ -1,14 +1,19 @@
 package bo;
 
+import Enums.SearchType;
 import Enums.Privilege;
 import Exeptions.NoSuchUserExeption;
 import Model.CartItem;
 import Model.Product;
+import Model.User;
+import Util.exeptions.ConnectionFailExeption;
 import dao.OrderDAO;
 import dao.ProductDAO;
+import dao.UserDAO;
 import ui.ViewCartItem;
 import ui.ViewItem;
 import ui.ViewProduct;
+import ui.ViewUser;
 import Model.User;
 import Model.Category;
 import dao.CategoryDAO;
@@ -116,6 +121,18 @@ public class Facade {
         OrderDAO.createOrder(userId, cart);
     }
 
+    public static List<ViewUser> getUsers(String searchType, String searchValue) throws IllegalArgumentException, SQLException {
+        List<User> users = new ArrayList<>();
+        List<ViewUser> viewUsers = new ArrayList<>();
+
+        switch (SearchType.valueOf(searchType)) {
+            case ALL: users.addAll(UserDAO.findAll());
+        }
+        for (User u: users) {
+            viewUsers.add(new ViewUser(u));
+        }
+        return viewUsers;
+    }
     public static List<Category> getAllCategories() throws SQLException {
         return CategoryDAO.findAll();
     }
@@ -133,20 +150,20 @@ public class Facade {
 
         Category category = new Category();
         category.setName(name.trim());
-    
+
         CategoryDAO.createCategory(category);
     }
-    
+
     public static void updateCategory(int id, String name) throws SQLException{
         if(name == null || name.trim().isEmpty()) throw new SQLException("Category name can't be empty");
 
         Category category = new Category();
         category.setId(id);
         category.setName(name);
-        
+
         CategoryDAO.updateCategory(category);
     }
-    
+
     public static void createProduct(String name, String description, double price, int stock, int categoryId) throws SQLException{
         validateProduct(name, price, stock);
 
