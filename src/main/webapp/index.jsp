@@ -21,6 +21,7 @@
         a:hover {
             background-color: #45a049;
         }
+        .error { color: red; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -32,6 +33,15 @@
     <%} else {
         %> <p>Not loged in</p>
     <%}%>
+
+    <%
+        String error = (String) request.getAttribute("error");
+        if (error != null) {
+    %>
+    <p class="error"><%= error %></p>
+    <%
+        }
+    %>
 
     <p>Click on the button to see all the products in storage.</p>
 
@@ -47,7 +57,7 @@
         Login
     </a>
 
-    <a href="<%= request.getContextPath() %>/userAdmin.jsp">
+    <a href="<%= request.getContextPath() %>/userAdmin">
         User administration
     </a>
 </body>
