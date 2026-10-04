@@ -16,6 +16,8 @@ import ui.ViewCartItem;
 import ui.ViewItem;
 import ui.ViewProduct;
 import ui.ViewUser;
+import dao.*;
+import ui.*;
 import Model.User;
 import Model.Category;
 import dao.CategoryDAO;
@@ -47,7 +49,7 @@ public class Facade {
         return toViewProductList(ProductDAO.findByName(name));
     }
 
-    private static List<ViewProduct> toViewProductList(List<Product> products) {
+    private static List<ViewProduct> toViewProductList(List<ProductDAO> products) {
         if (products == null || products.isEmpty()) {
             return null;
         }
@@ -163,8 +165,7 @@ public class Facade {
         }
         return viewUsers;
     }
-
-    public static List<Category> getAllCategories() throws SQLException {
+    public static List<CategoryDAO> getAllCategories() throws SQLException {
         return CategoryDAO.findAll();
     }
 
@@ -179,7 +180,7 @@ public class Facade {
     public static void createCategory(String name) throws SQLException{
         if(name == null || name.trim().isEmpty()) throw new SQLException("Category name can't be empty");
 
-        Category category = new Category();
+        CategoryDAO category = new CategoryDAO();
         category.setName(name.trim());
 
         CategoryDAO.createCategory(category);
@@ -188,7 +189,7 @@ public class Facade {
     public static void updateCategory(int id, String name) throws SQLException{
         if(name == null || name.trim().isEmpty()) throw new SQLException("Category name can't be empty");
 
-        Category category = new Category();
+        CategoryDAO category = new CategoryDAO();
         category.setId(id);
         category.setName(name);
 
@@ -198,7 +199,7 @@ public class Facade {
     public static void createProduct(String name, String description, double price, int stock, int categoryId) throws SQLException{
         validateProduct(name, price, stock);
 
-        Product product = new Product(0, name.trim(), description, price, stock, categoryId);
+        ProductDAO  product = new ProductDAO(0, name.trim(), description, price, stock, categoryId);
 
         ProductDAO.createProduct(product);
 
@@ -207,7 +208,7 @@ public class Facade {
     public static void updateProduct(int id, String name, String description, double price, int stock, int categoryId) throws SQLException{
         validateProduct(name, price, stock);
 
-        Product product = new Product(
+        ProductDAO product = new ProductDAO(
                 id,
                 name.trim(),
                 description,
@@ -253,6 +254,61 @@ public class Facade {
         Privilege privilege = Privilege.valueOf(role);
         UserDAO.add(userName, password, privilege, email);
 
+    }
+
+    public static List<ViewOrder> getOrdersToPack()
+            throws SQLException {
+
+        List<ViewOrder> orders = new ArrayList<>();
+
+        for (OrderDAO order : OrderDAO.findOrdersToPack()) {
+            orders.add(new ViewOrder(order));
+        }
+
+        return orders;
+    }
+
+    public static List<ViewOrderLine> getOrderLines(int orderId)
+            throws SQLException {
+
+        List<ViewOrderLine> lines = new ArrayList<>();
+
+        for (OrderLineDAO line : OrderLineDAO.findOrderLines(orderId)) {
+            lines.add(new ViewOrderLine(line));
+        }
+
+        return lines;
+    }
+
+    public static void packOrder(int orderId)
+            throws SQLException {
+
+        OrderDAO.packOrder(orderId);
+    }
+
+    public static ViewOrder getOrderById(int orderId)
+            throws SQLException {
+
+        OrderDAO order =
+                OrderDAO.findById(orderId);
+
+        if (order == null) {
+            return null;
+        }
+
+        return new ViewOrder(order);
+    }
+
+    public static List<ViewOrder> getPackedOrders()
+            throws SQLException {
+
+        List<ViewOrder> orders = new ArrayList<>();
+
+        for (OrderDAO order : OrderDAO.findPackedOrders()) {
+            orders.add(new ViewOrder(order));
+        }
+
+        return orders;
     }
 
     public static void deleteUser(String deleteType, String deleteValue) throws IllegalArgumentException, SQLException, NoSuchUserExeption {

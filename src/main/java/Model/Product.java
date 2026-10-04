@@ -8,10 +8,7 @@ public class Product {
     private int stock;
     private int categoryId;
 
-    public Product(){
-
-    }
-    public Product(int id, String name, String description, double price, int stock, int categoryId) {
+    protected Product(int id, String name, String description, double price, int stock, int categoryId) {
         this.id = id;
         this.name = name;
         this.description = description;

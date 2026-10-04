@@ -1,8 +1,6 @@
 package ui;
 
 import Model.CartItem;
-import Model.User;
-import Model.Product;
 import bo.CartService;
 import bo.Facade;
 import jakarta.servlet.ServletException;

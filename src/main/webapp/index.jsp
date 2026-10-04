@@ -65,5 +65,10 @@
     <a href="<%= request.getContextPath() %>/userAdmin">
         User administration
     </a>
+
+    <a href="<%= request.getContextPath() %>/warehouse">
+        Warehouse
+    </a>
+
 </body>
 </html>

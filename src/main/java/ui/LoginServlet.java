@@ -25,7 +25,7 @@ public class LoginServlet extends HttpServlet {
         User user = validateUser(req, resp, userName, password);
         if (user == null) return;
 
-        Privilege privilege = validateUserPrivilege(req, resp, userName, password);
+        Privilege privilege = user.getRole(); //validateUserPrivilege(req, resp, userName, password);
 
         if (privilege == null) {
             return;
