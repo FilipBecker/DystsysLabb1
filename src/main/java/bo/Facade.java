@@ -151,6 +151,12 @@ public class Facade {
                 user = UserDAO.getUserByUsername(searchValue);
                 if (user != null) users.add(user);
                 break;
+            case ROLE:
+                users.addAll(UserDAO.getUsersByRole(Privilege.valueOf(searchValue)));
+                break;
+            case EMAIL:
+                users.addAll(UserDAO.getUsersByEmail(searchValue));
+                break;
         }
         for (User u: users) {
             viewUsers.add(new ViewUser(u));

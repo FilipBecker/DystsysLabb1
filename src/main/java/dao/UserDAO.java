@@ -114,6 +114,49 @@ public class UserDAO extends User{
         }
     }
 
+    public static List<User> getUsersByRole(Privilege role) throws ConnectionFailExeption, SQLException {
+        List<User> users = new ArrayList<>();
+
+        Connection conn = DBConnection.getConnection();
+        try(PreparedStatement statement = conn.prepareStatement(
+                "SELECT id, username, role, email FROM users WHERE role=?")) {
+            statement.setString(1, role.name());
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String username = resultSet.getString("username");
+                String email = resultSet.getString("email");
+                users.add(new UserDAO(id, username, role, email));
+            }
+            return users;
+        }
+    }
+
+    public static List<User> getUsersByEmail(String email) throws ConnectionFailExeption, SQLException {
+        List<User> users = new ArrayList<>();
+
+        Connection conn = DBConnection.getConnection();
+        try(PreparedStatement statement = conn.prepareStatement(
+                "SELECT id, username, role, email FROM users WHERE email=?")) {
+            statement.setString(1, email);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String username = resultSet.getString("username");
+                Privilege role = switch (resultSet.getString("role")) {
+                    case "ADMIN" -> Privilege.ADMIN;
+                    case "WAREHOUSE" -> Privilege.WAREHOUSE;
+                    case "CUSTOMER" -> Privilege.CUSTOMER;
+                    default -> throw new SQLException("User has improper role: "+ resultSet.getString("role"));
+                };
+                users.add(new UserDAO(id, username, role, email));
+            }
+            return users;
+        }
+    }
+
     public static void add(String userName, String password, Privilege role, String email) throws ConnectionFailExeption, SQLException {
         Connection conn = DBConnection.getConnection();
 
