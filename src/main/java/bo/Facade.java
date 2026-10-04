@@ -1,24 +1,23 @@
 package bo;
 
-import Enums.Privlige;
 import Enums.SearchType;
+import Enums.Privilege;
 import Exeptions.NoSuchUserExeption;
 import Model.CartItem;
 import Model.Product;
 import Model.User;
 import Util.exeptions.ConnectionFailExeption;
+import dao.OrderDAO;
 import dao.ProductDAO;
 import dao.UserDAO;
 import ui.ViewCartItem;
 import ui.ViewItem;
 import ui.ViewProduct;
 import ui.ViewUser;
+import Model.User;
 
-import javax.swing.text.AttributeSet;
-import javax.swing.text.View;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -104,8 +103,20 @@ public class Facade {
     }
 
     //This should never return null
-    public static Privlige validateUser(String username, String password) throws NoSuchUserExeption, SQLException {
+    public static Privilege validateUser(String username, String password) throws NoSuchUserExeption, SQLException {
         return UserService.login(username, password).getRole();
+    }
+
+    public static User getUser(String username, String password)
+            throws NoSuchUserExeption, SQLException {
+
+        return UserService.login(username, password);
+    }
+
+    public static void placeOrder(int userId, List<CartItem> cart)
+            throws SQLException {
+
+        OrderDAO.createOrder(userId, cart);
     }
 
     public static List<ViewUser> getUsers(String searchType, String searchValue) throws IllegalArgumentException, SQLException {

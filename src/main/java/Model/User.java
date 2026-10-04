@@ -1,22 +1,22 @@
 package Model;
 
-import Enums.Privlige;
+import Enums.Privilege;
 
 public class User {
     private int id;
     private String username;
     private String password;
-    private Privlige role; // ADMIN, WAREHOUSE, CUSTOMER
+    private Privilege role; // ADMIN, WAREHOUSE, CUSTOMER
     private String email;
 
-    protected User(int id, String username, Privlige role, String email ){
+    protected User(int id, String username, Privilege role, String email ){
         this.id = id;
         this.username = username;
         this.role = role;
         this.email = email;
     }
 
-    protected User(int id, String username, String password, Privlige role, String email ){
+    protected User(int id, String username, String password, Privilege role, String email ){
         this.id = id;
         this.username = username;
         this.password = password;
@@ -45,10 +45,10 @@ public class User {
         this.password = password;
     }
 
-    public Privlige getRole() {
+    public Privilege getRole() {
         return role;
     }
-    public void setRole(Privlige role) {
+    public void setRole(Privilege role) {
         this.role = role;
     }
 

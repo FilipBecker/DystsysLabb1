@@ -1,6 +1,8 @@
 package ui;
 
 import Model.CartItem;
+import Model.User;
+import dao.OrderDAO;
 import Model.Product;
 import bo.CartService;
 import bo.Facade;
@@ -47,6 +49,9 @@ public class CartServlet extends HttpServlet {
 
         String action = req.getParameter("action");
 
+        /*
+        Clear the cart of all items
+         */
         if ("clear".equals(action)) {
             session.removeAttribute("cart");
 
@@ -54,6 +59,45 @@ public class CartServlet extends HttpServlet {
             return;
         }
 
+        /*
+        Place order, if order is successful: remove cart
+         */
+        if("placeOrder".equals(action)){
+
+            Integer userId = (Integer) session.getAttribute("userId");
+
+            if (userId == null) {
+                resp.sendRedirect(req.getContextPath() + "/login.jsp");
+                return;
+            }
+
+            List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
+
+            if(cart == null || cart.isEmpty()){
+                session.setAttribute("error", "Your cart is empty");
+                resp.sendRedirect(req.getContextPath() + "/cart");
+                return;
+            }
+
+            try{
+                OrderDAO.createOrder(userId, cart);
+
+                session.removeAttribute("cart");
+                session.setAttribute("message", "Order placed successfully.");
+
+                resp.sendRedirect(req.getContextPath() + "/cart");
+                return;
+            } catch (SQLException e){
+                session.setAttribute("error", e.getMessage());
+                resp.sendRedirect(req.getContextPath() + "/cart");
+                return;
+            }
+        }
+
+
+        /*
+        Add product to cart
+        */
         List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
         if(cart == null) cart = new ArrayList<>();
 

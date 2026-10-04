@@ -1,10 +1,9 @@
 package dao;
-import Enums.Privlige;
+import Enums.Privilege;
 import Model.User;
 import Util.DBConnection;
 import Util.exeptions.ConnectionFailExeption;
 
-import java.awt.image.DataBufferDouble;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,7 +13,7 @@ import java.util.List;
 
 public class UserDAO extends User{
 
-    private UserDAO(int id, String username, Privlige role, String email) {
+    private UserDAO(int id, String username, Privilege role, String email) {
         super(id, username, role, email);
     }
 
@@ -30,10 +29,10 @@ public class UserDAO extends User{
             ResultSet resultSet = statement.executeQuery();
             if(resultSet.next()){
                 int id = resultSet.getInt("id");
-                Privlige role = switch (resultSet.getString("role")) {
-                    case "ADMIN" -> Privlige.ADMIN;
-                    case "WAREHOUSE" -> Privlige.WAREHOUSE;
-                    case "CUSTOMER" -> Privlige.COSTUMER;
+                Privilege role = switch (resultSet.getString("role")) {
+                    case "ADMIN" -> Privilege.ADMIN;
+                    case "WAREHOUSE" -> Privilege.WAREHOUSE;
+                    case "CUSTOMER" -> Privilege.COSTUMER;
                             default -> throw new SQLException("User has improper role: "+ resultSet.getString("role"));
                         };
                 String email = resultSet.getString("email");
@@ -54,10 +53,10 @@ public class UserDAO extends User{
             while (resultSet.next()){
                 int id = resultSet.getInt("id");
                 String username = resultSet.getString("username");
-                Privlige role = switch (resultSet.getString("role")) {
-                    case "ADMIN" -> Privlige.ADMIN;
-                    case "WAREHOUSE" -> Privlige.WAREHOUSE;
-                    case "CUSTOMER" -> Privlige.COSTUMER;
+                Privilege role = switch (resultSet.getString("role")) {
+                    case "ADMIN" -> Privilege.ADMIN;
+                    case "WAREHOUSE" -> Privilege.WAREHOUSE;
+                    case "CUSTOMER" -> Privilege.COSTUMER;
                     default -> throw new SQLException("User has improper role: "+ resultSet.getString("role"));
                 };
                 String email = resultSet.getString("email");
