@@ -1,12 +1,12 @@
 package ui;
 
-import Enums.Privlige;
+import Enums.Privilege;
 import Model.User;
 
 public class ViewUser {
     private final int id;
     private final String username;
-    private final Privlige role; // ADMIN, WAREHOUSE, CUSTOMER
+    private final Privilege role; // ADMIN, WAREHOUSE, CUSTOMER
     private final String email;
 
     public ViewUser(User user){
@@ -24,7 +24,7 @@ public class ViewUser {
         return username;
     }
 
-    public Privlige getRole() {
+    public Privilege getRole() {
         return role;
     }
 

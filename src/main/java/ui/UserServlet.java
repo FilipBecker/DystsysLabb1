@@ -1,6 +1,6 @@
 package ui;
 
-import Enums.Privlige;
+import Enums.Privilege;
 import bo.Facade;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,8 +17,8 @@ import java.util.List;
 public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Privlige privlige = LoginServlet.validateSessionUser(req, resp);
-        switch (privlige) {
+        Privilege Privilege = LoginServlet.validateSessionUser(req, resp);
+        switch (Privilege) {
             case null:
                 return;
             case ADMIN:
