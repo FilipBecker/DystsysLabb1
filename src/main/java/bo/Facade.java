@@ -131,16 +131,33 @@ public class Facade {
             search = SearchType.ALL;
         }
         List<User> users = new ArrayList<>();
+        User user;
         List<ViewUser> viewUsers = new ArrayList<>();
 
         switch (search) {
-            case ALL: users.addAll(UserDAO.findAll());
+            case ALL:
+                users.addAll(UserDAO.findAll());
+                break;
+            case ID:
+                try {
+                    int id = Integer.parseInt(searchValue);
+                    user = UserDAO.getUserById(id);
+                    if (user != null) users.add(user);
+                } catch (NumberFormatException e) {
+                    throw new IllegalArgumentException("Invalid Id");
+                }
+                break;
+            case USERNAME:
+                user = UserDAO.getUserByUsername(searchValue);
+                if (user != null) users.add(user);
+                break;
         }
         for (User u: users) {
             viewUsers.add(new ViewUser(u));
         }
         return viewUsers;
     }
+
     public static List<Category> getAllCategories() throws SQLException {
         return CategoryDAO.findAll();
     }

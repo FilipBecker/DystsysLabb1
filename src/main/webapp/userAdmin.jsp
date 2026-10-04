@@ -85,6 +85,20 @@
         <%}%>
         </tbody>
     </table>
+    <%} else if (users != null) {%>
+<table>
+    <tbody>
+    <tr>
+        <th>User id</th>
+        <th>Username</th>
+        <th>Role</th>
+        <th>Email</th>
+    </tr>
+    <tr>
+        <td>No users found</td>
+    </tr>
+    </tbody>
+</table>
     <%}%>
 
 <p>Add user</p>

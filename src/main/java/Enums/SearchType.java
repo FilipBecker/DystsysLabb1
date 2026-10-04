@@ -1,5 +1,5 @@
 package Enums;
 
 public enum SearchType {
-    ALL;
+    ALL, ID, USERNAME;
 }
