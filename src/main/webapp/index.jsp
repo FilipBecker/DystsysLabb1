@@ -46,5 +46,9 @@
     <a href="<%= request.getContextPath() %>/login.jsp">
         Login
     </a>
+
+    <a href="<%= request.getContextPath() %>/userAdmin.jsp">
+        User administration
+    </a>
 </body>
 </html>
