@@ -1,3 +1,5 @@
+<%@ page import="ui.ViewUser" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -44,19 +46,42 @@
 
 <p>Search users by</p>
 <form method="get" action="<%= request.getContextPath() %>/Users">
-    <input type="radio" id="All" name="SearchType" value="all">
+    <input type="radio" id="All" name="SearchType" value="ALL">
     <label for="All">All</label><br>
-    <input type="radio" id="Id" name="SearchType" value="id">
+    <input type="radio" id="Id" name="SearchType" value="ID">
     <label for="Id">Id</label><br>
-    <input type="radio" id="Username" name="SearchType" value="username">
+    <input type="radio" id="Username" name="SearchType" value="USERNAME">
     <label for="Username">Username</label><br>
-    <input type="radio" id="Role" name="SearchType" value="role">
+    <input type="radio" id="Role" name="SearchType" value="ROLE">
     <label for="Role">Role</label><br>
-    <input type="radio" id="Email" name="SearchType" value="email">
+    <input type="radio" id="Email" name="SearchType" value="EMAIL">
     <label for="Email">Email</label><br>
     <input type="text" name="SearchValue" value="">
     <input type="submit" value="Search">
 </form>
+
+<% List<ViewUser> users = (List<ViewUser>) request.getAttribute("users");
+    if (users != null && !users.isEmpty()) {
+        %>
+    <table>
+        <tbody>
+            <tr>
+                <th>User id</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Email</th>
+            </tr>
+        <% for (ViewUser u: users) {%>
+            <tr>
+                <td><%= u.getId()%></td>
+                <td><%= u.getUsername()%></td>
+                <td><%= u.getRole()%></td>
+                <td><%= u.getEmail()%></td>
+            </tr>
+        <%}%>
+        </tbody>
+    </table>
+    <%}%>
 
 </body>
 </html>

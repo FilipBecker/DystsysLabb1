@@ -9,11 +9,17 @@ public class User {
     private Privlige role; // ADMIN, WAREHOUSE, CUSTOMER
     private String email;
 
-    public User() {}
-
-    public User(int id, String username, Privlige role, String email ){
+    protected User(int id, String username, Privlige role, String email ){
         this.id = id;
         this.username = username;
+        this.role = role;
+        this.email = email;
+    }
+
+    protected User(int id, String username, String password, Privlige role, String email ){
+        this.id = id;
+        this.username = username;
+        this.password = password;
         this.role = role;
         this.email = email;
     }

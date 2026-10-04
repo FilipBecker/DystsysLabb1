@@ -1,15 +1,18 @@
 package bo;
 
 import Enums.Privlige;
+import Enums.SearchType;
 import Exeptions.NoSuchUserExeption;
 import Model.CartItem;
 import Model.Product;
+import Model.User;
 import Util.exeptions.ConnectionFailExeption;
 import dao.ProductDAO;
 import dao.UserDAO;
 import ui.ViewCartItem;
 import ui.ViewItem;
 import ui.ViewProduct;
+import ui.ViewUser;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.View;
@@ -105,4 +108,16 @@ public class Facade {
         return UserService.login(username, password).getRole();
     }
 
+    public static List<ViewUser> getUsers(String searchType, String searchValue) throws IllegalArgumentException, SQLException {
+        List<User> users = new ArrayList<>();
+        List<ViewUser> viewUsers = new ArrayList<>();
+
+        switch (SearchType.valueOf(searchType)) {
+            case ALL: users.addAll(UserDAO.findAll());
+        }
+        for (User u: users) {
+            viewUsers.add(new ViewUser(u));
+        }
+        return viewUsers;
+    }
 }
