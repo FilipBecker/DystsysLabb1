@@ -7,6 +7,10 @@
     </style>
 </head>
 <body>
+<a href="<%= request.getContextPath() %>/" class="back-btn">
+    ← Back to the start page
+</a>
+
     <%
         String error = (String) request.getAttribute("error");
         if (error != null) {

@@ -28,6 +28,10 @@
 </head>
 <body>
 
+<a href="<%= request.getContextPath() %>/" class="back-btn">
+    ← Back to the start page
+</a>
+
 <h1>User administration page</h1>
 <% String userName = (String) session.getAttribute("userName");
     if (userName != null) {
