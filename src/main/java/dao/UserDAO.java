@@ -66,6 +66,54 @@ public class UserDAO extends User{
         }
     }
 
+    public static User getUserById(int id) throws ConnectionFailExeption, SQLException {
+        Connection conn = DBConnection.getConnection();
+        try(PreparedStatement statement = conn.prepareStatement(
+                "SELECT id, username, role, email FROM users WHERE id = ?"
+        )){
+
+            statement.setInt(1, id);
+
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()){
+                String username = resultSet.getString("username");
+                Privilege role = switch (resultSet.getString("role")) {
+                    case "ADMIN" -> Privilege.ADMIN;
+                    case "WAREHOUSE" -> Privilege.WAREHOUSE;
+                    case "CUSTOMER" -> Privilege.CUSTOMER;
+                    default -> throw new SQLException("User has improper role: "+ resultSet.getString("role"));
+                };
+                String email = resultSet.getString("email");
+                return new UserDAO(id, username, role, email);
+            }
+            return null;
+        }
+    }
+
+    public static User getUserByUsername(String username) throws ConnectionFailExeption, SQLException {
+        Connection conn = DBConnection.getConnection();
+        try(PreparedStatement statement = conn.prepareStatement(
+                "SELECT id, username, role, email FROM users WHERE username = ?"
+        )){
+
+            statement.setString(1, username);
+
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()){
+                int id = resultSet.getInt("id");
+                Privilege role = switch (resultSet.getString("role")) {
+                    case "ADMIN" -> Privilege.ADMIN;
+                    case "WAREHOUSE" -> Privilege.WAREHOUSE;
+                    case "CUSTOMER" -> Privilege.CUSTOMER;
+                    default -> throw new SQLException("User has improper role: "+ resultSet.getString("role"));
+                };
+                String email = resultSet.getString("email");
+                return new UserDAO(id, username, role, email);
+            }
+            return null;
+        }
+    }
+
     public static void add(String userName, String password, Privilege role, String email) throws ConnectionFailExeption, SQLException {
         Connection conn = DBConnection.getConnection();
 
@@ -76,6 +124,28 @@ public class UserDAO extends User{
             statement.setString(2, password);
             statement.setString(3, role.name());
             statement.setString(4, email);
+
+            statement.executeUpdate();
+        }
+    }
+
+    public static void deleteById(int id) throws ConnectionFailExeption, SQLException {
+        Connection conn = DBConnection.getConnection();
+
+        try (PreparedStatement statement = conn.prepareStatement(
+                "DELETE FROM users WHERE id=?")){
+            statement.setInt(1, id);
+
+            statement.executeUpdate();
+        }
+    }
+
+    public static void deleteByUsername(String username) throws ConnectionFailExeption, SQLException {
+        Connection conn = DBConnection.getConnection();
+
+        try (PreparedStatement statement = conn.prepareStatement(
+                "DELETE FROM users WHERE username=?")){
+            statement.setString(1, username);
 
             statement.executeUpdate();
         }
