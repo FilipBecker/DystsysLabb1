@@ -103,5 +103,15 @@
     <input type="text" id="Email" name="email" value=""><br>
     <input type="submit" value="Create user">
 </form>
+
+<p>Delete user</p>
+<form method="post" action="<%= request.getContextPath() %>/Users/Delete">
+    <input type="radio" id="Id" name="deleteType" value="ID">
+    <label for="Id">Id</label><br>
+    <input type="radio" id="Username" name="deleteType" value="USERNAME">
+    <label for="Username">Username</label><br>
+    <input type="text" name="deleteValue" value="">
+    <input type="submit" value="Delete">
+</form>
 </body>
 </html>

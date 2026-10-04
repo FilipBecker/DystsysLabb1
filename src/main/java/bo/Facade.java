@@ -1,5 +1,6 @@
 package bo;
 
+import Enums.DeleteType;
 import Enums.SearchType;
 import Enums.Privilege;
 import Exeptions.NoSuchUserExeption;
@@ -7,6 +8,7 @@ import Model.CartItem;
 import Model.Product;
 import Model.User;
 import Util.exeptions.ConnectionFailExeption;
+import com.mysql.cj.jdbc.exceptions.NotUpdatable;
 import dao.OrderDAO;
 import dao.ProductDAO;
 import dao.UserDAO;
@@ -122,10 +124,16 @@ public class Facade {
     }
 
     public static List<ViewUser> getUsers(String searchType, String searchValue) throws IllegalArgumentException, SQLException {
+        SearchType search;
+        if (searchType != null) {
+            search = SearchType.valueOf(searchType);
+        } else {
+            search = SearchType.ALL;
+        }
         List<User> users = new ArrayList<>();
         List<ViewUser> viewUsers = new ArrayList<>();
 
-        switch (SearchType.valueOf(searchType)) {
+        switch (search) {
             case ALL: users.addAll(UserDAO.findAll());
         }
         for (User u: users) {
@@ -222,5 +230,42 @@ public class Facade {
         Privilege privilege = Privilege.valueOf(role);
         UserDAO.add(userName, password, privilege, email);
 
+    }
+
+    public static void deleteUser(String deleteType, String deleteValue) throws IllegalArgumentException, SQLException, NoSuchUserExeption {
+        if (deleteType == null || deleteType.isEmpty()) {
+            throw new IllegalArgumentException("Select a parameter to delete by");
+        } else if (deleteValue == null || deleteValue.isEmpty()) {
+            throw new IllegalArgumentException("Give a value to delete by");
+        }
+        try {
+            switch (DeleteType.valueOf(deleteType)) {
+                case ID:
+                    int id = Integer.parseInt(deleteValue);
+                    User userById = UserDAO.getUserById(id);
+                    if (userById == null) {
+                        throw new NoSuchUserExeption("No user with given id");
+                    } else if (userById.getRole() == Privilege.ADMIN) {
+                        throw new NoSuchUserExeption("Can not delete an admin");
+                    } else {
+                        UserDAO.deleteById(Integer.parseInt(deleteValue));
+                    }
+                    break;
+                case USERNAME:
+                    User userByUsername = UserDAO.getUserByUsername(deleteValue);
+                    if (userByUsername == null) {
+                        throw new NoSuchUserExeption("No user with given id");
+                    } else if (userByUsername.getRole() == Privilege.ADMIN) {
+                        throw new NoSuchUserExeption("Can not delete an admin");
+                    } else {
+                        UserDAO.deleteByUsername(deleteValue);
+                    }
+                    break;
+            }
+        }catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid id value: "+deleteValue);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid deletion method");
+        }
     }
 }
