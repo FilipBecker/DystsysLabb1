@@ -190,20 +190,13 @@ public class Facade {
     public static void createCategory(String name) throws SQLException{
         if(name == null || name.trim().isEmpty()) throw new SQLException("Category name can't be empty");
 
-        CategoryDAO category = new CategoryDAO();
-        category.setName(name.trim());
-
-        CategoryDAO.createCategory(category);
+        CategoryDAO.createCategory(name.trim());
     }
 
     public static void updateCategory(int id, String name) throws SQLException{
         if(name == null || name.trim().isEmpty()) throw new SQLException("Category name can't be empty");
 
-        CategoryDAO category = new CategoryDAO();
-        category.setId(id);
-        category.setName(name);
-
-        CategoryDAO.updateCategory(category);
+        CategoryDAO.updateCategory(name.trim(), id);
     }
 
     public static void createProduct(String name, String description, double price, int stock, int categoryId) throws SQLException{
