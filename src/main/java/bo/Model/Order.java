@@ -2,6 +2,9 @@ package bo.Model;
 
 import java.sql.Timestamp;
 
+/**
+ * Represents the metadata for an order in the model
+ */
 public class Order {
 
     private int id;
