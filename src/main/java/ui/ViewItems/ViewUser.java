@@ -2,7 +2,9 @@ package ui.ViewItems;
 
 import Enums.Privilege;
 import bo.Model.User;
-
+/**
+ * A User Object represented in the UI as a ViewUser Object instead of the model version
+ */
 public class ViewUser {
     private final int id;
     private final String username;
