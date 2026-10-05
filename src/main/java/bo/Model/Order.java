@@ -1,4 +1,4 @@
-package Model;
+package bo.Model;
 
 import java.sql.Timestamp;
 
@@ -12,7 +12,7 @@ public class Order {
     protected Order() {
     }
 
-    public Order(int id, int userId, Timestamp orderDate, String status) {
+    protected Order(int id, int userId, Timestamp orderDate, String status) {
         this.id = id;
         this.userId = userId;
         this.orderDate = orderDate;

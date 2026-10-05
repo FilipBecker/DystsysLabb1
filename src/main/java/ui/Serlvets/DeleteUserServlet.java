@@ -1,4 +1,4 @@
-package ui;
+package ui.Serlvets;
 
 import Enums.Privilege;
 import Exeptions.NoSuchUserExeption;
@@ -11,8 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 @WebServlet("/Users/Delete")
 public class DeleteUserServlet extends HttpServlet {

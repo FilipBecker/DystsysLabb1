@@ -1,6 +1,6 @@
-package ui;
+package ui.ViewItems;
 
-import Model.Product;
+import bo.Model.Product;
 
 public class ViewProduct {
     private int id;

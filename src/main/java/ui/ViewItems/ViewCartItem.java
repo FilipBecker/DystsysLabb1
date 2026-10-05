@@ -1,6 +1,4 @@
-package ui;
-
-import Model.CartItem;
+package ui.ViewItems;
 
 public class ViewCartItem {
     private final ViewProduct product;

@@ -1,8 +1,7 @@
 package dao;
 
-import Model.CartItem;
-import Model.Order;
-import Model.OrderLine;
+import bo.Model.CartItem;
+import bo.Model.Order;
 import Util.DBConnection;
 
 import java.sql.*;
@@ -10,15 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class OrderDAO{
+public class OrderDAO extends Order{
 
-    /* OrderDAO() {
+    OrderDAO() {
         super();
     }
 
     public OrderDAO(int id, int userId, Timestamp orderDate, String status) {
         super(id, userId,orderDate, status);
-    }*/
+    }
 
     public static void createOrder(int userId, List<CartItem> cart) throws SQLException {
         if (cart == null || cart.isEmpty()) throw new SQLException("Cart is empty");
@@ -100,7 +99,7 @@ public class OrderDAO{
 
             while (resultSet.next()) {
 
-                Order order = new Order(
+                Order order = new OrderDAO(
                         resultSet.getInt("id"),
                         resultSet.getInt("user_id"),
                         resultSet.getTimestamp("order_date"),
@@ -174,7 +173,7 @@ public class OrderDAO{
 
             try(ResultSet resultSet = statement.executeQuery()){
                 if(resultSet.next()){
-                    return new Order(
+                    return new OrderDAO(
                             resultSet.getInt("id"),
                             resultSet.getInt("user_id"),
                             resultSet.getTimestamp("order_date"),
@@ -248,7 +247,7 @@ public class OrderDAO{
 
                 while (resultSet.next()) {
 
-                    Order order = new Order(
+                    Order order = new OrderDAO(
                             resultSet.getInt("id"),
                             resultSet.getInt("user_id"),
                             resultSet.getTimestamp("order_date"),

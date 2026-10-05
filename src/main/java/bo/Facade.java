@@ -4,19 +4,14 @@ import Enums.DeleteType;
 import Enums.SearchType;
 import Enums.Privilege;
 import Exeptions.NoSuchUserExeption;
-import Model.*;
+import bo.Model.*;
 import Util.exeptions.ConnectionFailExeption;
-import com.mysql.cj.jdbc.exceptions.NotUpdatable;
 import dao.OrderDAO;
 import dao.ProductDAO;
 import dao.UserDAO;
-import ui.ViewCartItem;
-import ui.ViewItem;
-import ui.ViewProduct;
-import ui.ViewUser;
+import ui.ViewItems.*;
 import dao.*;
-import ui.*;
-import Model.User;
+import bo.Model.User;
 import dao.CategoryDAO;
 
 import java.sql.SQLException;
@@ -26,10 +21,10 @@ import java.util.List;
 
 
 public class Facade {
-    public static ViewItem getItem() {
+    /*public static ViewItem getItem() {
         TestItem testItem = new TestItem("Test", 100);
         return new ViewItem(testItem);
-    }
+    }*/
 
     public static List<ViewProduct> getAllProducts() throws SQLException {
         //return toViewProductList(ProductDAO.findAll());
@@ -109,26 +104,26 @@ public class Facade {
             );
         }
 
-        return CartService.addToCart(cart, product, quantity);
+        return addToCart(cart, product, quantity);
     }
 
 
-    public static double getTotal(List<CartItem> cart) {
+    /*public static double getTotal(List<CartItem> cart) {
         if (cart == null || cart.isEmpty()) {
             return 0;
         }
         return CartService.getTotal(cart);
-    }
+    }*/
 
     //This should never return null
     public static Privilege validateUser(String username, String password) throws NoSuchUserExeption, SQLException {
-        return UserService.login(username, password).getRole();
+        return login(username, password).getRole();
     }
 
     public static User getUser(String username, String password)
             throws NoSuchUserExeption, SQLException {
 
-        return UserService.login(username, password);
+        return login(username, password);
     }
 
     public static void placeOrder(int userId, List<CartItem> cart)
@@ -201,7 +196,7 @@ public class Facade {
     public static void createCategory(String name) throws SQLException{
         if(name == null || name.trim().isEmpty()) throw new SQLException("Category name can't be empty");
 
-        Category category = new Category();
+        CategoryDAO category = new CategoryDAO();
         category.setName(name.trim());
 
         CategoryDAO.createCategory(category);
@@ -210,7 +205,7 @@ public class Facade {
     public static void updateCategory(int id, String name) throws SQLException{
         if(name == null || name.trim().isEmpty()) throw new SQLException("Category name can't be empty");
 
-        Category category = new Category();
+        CategoryDAO category = new CategoryDAO();
         category.setId(id);
         category.setName(name);
 
@@ -220,7 +215,7 @@ public class Facade {
     public static void createProduct(String name, String description, double price, int stock, int categoryId) throws SQLException{
         validateProduct(name, price, stock);
 
-        Product  product = new Product(0, name.trim(), description, price, stock, categoryId);
+        ProductDAO product = new ProductDAO(0, name.trim(), description, price, stock, categoryId);
 
         ProductDAO.createProduct(product);
 
@@ -229,7 +224,7 @@ public class Facade {
     public static void updateProduct(int id, String name, String description, double price, int stock, int categoryId) throws SQLException{
         validateProduct(name, price, stock);
 
-        Product product = new Product(
+        ProductDAO product = new ProductDAO(
                 id,
                 name.trim(),
                 description,
@@ -367,6 +362,40 @@ public class Facade {
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Invalid deletion method");
         }
+    }
+
+    public static User login(String username, String password) throws ConnectionFailExeption, SQLException, NoSuchUserExeption {
+        if (username == null || username.isEmpty() || password == null || password.isEmpty()) throw new NoSuchUserExeption("Invalid user name or password");
+        User user = UserDAO.findByUserNameAndPassword(username, password);
+        if (user == null) throw new NoSuchUserExeption("Invalid user name or password");
+        return user;
+    }
+
+    public static List<CartItem> addToCart(List<CartItem> cart, Product product, int quantity){
+        if(cart == null){
+            cart = new ArrayList<>();
+        }
+
+        /*
+        Checking if the product already exists in the cart, if true then increase the quantity of that item
+         */
+        for(CartItem item : cart){
+            if(item.getProduct().getId() == product.getId()){
+                item.setQuantity(item.getQuantity() + quantity);
+                return cart;
+            }
+        }
+
+        /*
+        Else add the product to the cart
+         */
+        cart.add(new CartItem(product, quantity));
+        return cart;
+    }
+
+    public static double getTotal(List<CartItem> cart){
+        if(cart == null) return 0;
+        return cart.stream().mapToDouble(CartItem::getSubtotal).sum();
     }
 
 }

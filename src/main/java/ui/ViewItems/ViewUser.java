@@ -1,7 +1,7 @@
-package ui;
+package ui.ViewItems;
 
 import Enums.Privilege;
-import Model.User;
+import bo.Model.User;
 
 public class ViewUser {
     private final int id;

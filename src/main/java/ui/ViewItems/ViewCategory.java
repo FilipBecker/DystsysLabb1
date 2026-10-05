@@ -1,6 +1,6 @@
-package ui;
+package ui.ViewItems;
 
-import Model.Category;
+import bo.Model.Category;
 
 public class ViewCategory {
     private int id;

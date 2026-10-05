@@ -1,6 +1,4 @@
-package ui;
-
-import Util.exeptions.*;
+package ui.Serlvets;
 
 import bo.Facade;
 import jakarta.servlet.ServletException;
@@ -8,6 +6,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import ui.ViewItems.ViewProduct;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;

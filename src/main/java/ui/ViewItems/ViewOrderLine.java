@@ -1,6 +1,6 @@
-package ui;
+package ui.ViewItems;
 
-import Model.OrderLine;
+import bo.Model.OrderLine;
 
 public class ViewOrderLine {
 

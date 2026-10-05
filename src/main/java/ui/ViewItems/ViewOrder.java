@@ -1,6 +1,6 @@
-package ui;
+package ui.ViewItems;
 
-import Model.Order;
+import bo.Model.Order;
 
 import java.sql.Timestamp;
 

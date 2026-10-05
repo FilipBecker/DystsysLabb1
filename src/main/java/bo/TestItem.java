@@ -1,5 +1,5 @@
 package bo;
-
+/*
 public class TestItem {
     private String name;
     private int value;
@@ -33,3 +33,4 @@ public class TestItem {
                 '}';
     }
 }
+*/

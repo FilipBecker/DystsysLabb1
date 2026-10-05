@@ -1,6 +1,6 @@
 package dao;
 
-import Model.Category;
+import bo.Model.Category;
 import Util.DBConnection;
 
 import java.sql.Connection;
@@ -10,15 +10,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryDAO{
+public class CategoryDAO extends Category{
 
-    /*public CategoryDAO() {
+    public CategoryDAO() {
         super();
     }
 
     public CategoryDAO(int id, String name) {
         super(id, name);
-    }*/
+    }
 
     public static List<Category> findAll() throws SQLException {
         List<Category> categories = new ArrayList<>();
@@ -29,7 +29,7 @@ public class CategoryDAO{
              ResultSet resultSet = statement.executeQuery()) {
 
             while(resultSet.next()) {
-                Category category = new Category(
+                Category category = new CategoryDAO(
                         resultSet.getInt("id"),
                         resultSet.getString("name")
                 );
@@ -49,7 +49,7 @@ public class CategoryDAO{
 
             try(ResultSet resultSet= statement.executeQuery()){
                 if(resultSet.next()){
-                    return new Category(
+                    return new CategoryDAO(
                             resultSet.getInt("id"),
                             resultSet.getString("name")
                     );
@@ -69,7 +69,7 @@ public class CategoryDAO{
 
             try(ResultSet resultSet= statement.executeQuery()){
                 if(resultSet.next()){
-                    return new Category(
+                    return new CategoryDAO(
                             resultSet.getInt("id"),
                             resultSet.getString("name")
                     );

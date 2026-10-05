@@ -1,6 +1,7 @@
 package dao;
 
-import Model.OrderLine;
+import bo.Model.Order;
+import bo.Model.OrderLine;
 import Util.DBConnection;
 
 import java.sql.Connection;
@@ -10,13 +11,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderLineDAO{
-    /*public OrderLineDAO(int id, int orderId, int productId, int quantity, double price) {
+public class OrderLineDAO extends OrderLine {
+    public OrderLineDAO(int id, int orderId, int productId, int quantity, double price) {
         super(id, orderId, productId, quantity, price);
     }
 
     public OrderLineDAO() {
-    }*/
+    }
 
     public static List<OrderLine> findOrderLines(int orderId)
             throws SQLException {
@@ -37,7 +38,7 @@ public class OrderLineDAO{
 
                 while (resultSet.next()) {
 
-                    OrderLine line = new OrderLine(
+                    OrderLine line = new OrderLineDAO(
                             resultSet.getInt("id"),
                             resultSet.getInt("order_id"),
                             resultSet.getInt("product_id"),

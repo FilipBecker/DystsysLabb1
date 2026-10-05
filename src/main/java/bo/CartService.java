@@ -1,10 +1,5 @@
 package bo;
-import Model.CartItem;
-import Model.Product;
-
-import java.util.ArrayList;
-import java.util.List;
-
+/*
 public class CartService {
 
     public static List<CartItem> addToCart(List<CartItem> cart, Product product, int quantity){
@@ -12,9 +7,9 @@ public class CartService {
             cart = new ArrayList<>();
         }
 
-        /*
+
         Checking if the product already exists in the cart, if true then increase the quantity of that item
-         */
+
         for(CartItem item : cart){
             if(item.getProduct().getId() == product.getId()){
                 item.setQuantity(item.getQuantity() + quantity);
@@ -22,9 +17,9 @@ public class CartService {
             }
         }
 
-        /*
+
         Else add the product to the cart
-         */
+
         cart.add(new CartItem(product, quantity));
         return cart;
     }
@@ -34,3 +29,4 @@ public class CartService {
         return cart.stream().mapToDouble(CartItem::getSubtotal).sum();
     }
 }
+*/

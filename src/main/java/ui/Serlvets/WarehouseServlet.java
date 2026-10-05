@@ -1,16 +1,15 @@
-package ui;
+package ui.Serlvets;
 
 import Enums.Privilege;
-import Model.OrderLine;
 
 import bo.Facade;
-import dao.OrderLineDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import ui.ViewItems.ViewOrder;
+import ui.ViewItems.ViewOrderLine;
 
 import java.io.IOException;
 import java.sql.SQLException;

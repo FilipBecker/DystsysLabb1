@@ -1,12 +1,6 @@
 package bo;
 
-import Exeptions.NoSuchUserExeption;
-import Model.User;
-import Util.exeptions.ConnectionFailExeption;
-import dao.UserDAO;
-
-import java.sql.SQLException;
-
+/*
 public class UserService {
 
     public static User login(String username, String password) throws ConnectionFailExeption, SQLException, NoSuchUserExeption {
@@ -16,3 +10,4 @@ public class UserService {
         return user;
     }
 }
+*/

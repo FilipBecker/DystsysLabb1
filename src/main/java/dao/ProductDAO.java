@@ -1,6 +1,6 @@
 package dao;
 
-import Model.Product;
+import bo.Model.Product;
 import Util.DBConnection;
 import Util.exeptions.ConnectionFailExeption;
 
@@ -11,11 +11,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductDAO{
+public class ProductDAO extends Product{
 
-    /*public ProductDAO(int id, String name, String description, double price, int stock, int category) {
+    public ProductDAO(int id, String name, String description, double price, int stock, int category) {
         super(id, name, description, price, stock, category);
-    }*/
+    }
 
     public static List<Product> findAll() throws ConnectionFailExeption, SQLException{
         List<Product> products = new ArrayList<>();
@@ -26,7 +26,7 @@ public class ProductDAO{
             ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
-                Product product = new Product(
+                ProductDAO product = new ProductDAO(
                         resultSet.getInt("id"),
                         resultSet.getString("name"),
                         resultSet.getString("description"),
@@ -52,7 +52,7 @@ public class ProductDAO{
 
             if (resultSet.next()) {
 
-                return new Product(
+                return new ProductDAO(
                         resultSet.getInt("id"),
                         resultSet.getString("name"),
                         resultSet.getString("description"),
@@ -79,7 +79,7 @@ public class ProductDAO{
 
             while (resultSet.next()) {
 
-                Product product = new Product(
+                ProductDAO product = new ProductDAO(
                         resultSet.getInt("id"),
                         resultSet.getString("name"),
                         resultSet.getString("description"),

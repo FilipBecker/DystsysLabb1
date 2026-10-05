@@ -1,4 +1,4 @@
-package Model;
+package bo.Model;
 
 public class CartItem {
     private Product product;

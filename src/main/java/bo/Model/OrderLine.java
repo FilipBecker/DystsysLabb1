@@ -1,4 +1,4 @@
-package Model;
+package bo.Model;
 
 public class OrderLine {
 
@@ -11,7 +11,7 @@ public class OrderLine {
     protected OrderLine() {
     }
 
-    public OrderLine(int id, int orderId, int productId,
+    protected OrderLine(int id, int orderId, int productId,
                      int quantity, double price) {
         this.id = id;
         this.orderId = orderId;

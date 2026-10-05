@@ -1,7 +1,6 @@
-package ui;
+package ui.Serlvets;
 
-import Model.CartItem;
-import bo.CartService;
+import bo.Model.CartItem;
 import bo.Facade;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,6 +8,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import ui.ViewItems.ViewCartItem;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,7 +19,6 @@ import java.io.IOException;
 @WebServlet("/cart")
 public class CartServlet extends HttpServlet {
 
-    private final CartService cartService = new CartService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

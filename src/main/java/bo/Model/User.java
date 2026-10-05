@@ -1,4 +1,4 @@
-package Model;
+package bo.Model;
 
 import Enums.Privilege;
 
@@ -9,14 +9,14 @@ public class User {
     private Privilege role; // ADMIN, WAREHOUSE, CUSTOMER
     private String email;
 
-    public User(int id, String username, Privilege role, String email ){
+    protected User(int id, String username, Privilege role, String email ){
         this.id = id;
         this.username = username;
         this.role = role;
         this.email = email;
     }
 
-    public User(int id, String username, String password, Privilege role, String email ){
+    protected User(int id, String username, String password, Privilege role, String email ){
         this.id = id;
         this.username = username;
         this.password = password;

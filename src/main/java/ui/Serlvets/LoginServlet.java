@@ -1,8 +1,8 @@
-package ui;
+package ui.Serlvets;
 
 import Enums.Privilege;
 import Exeptions.NoSuchUserExeption;
-import Model.User;
+import bo.Model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
