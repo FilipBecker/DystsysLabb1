@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Handles the view to get all products from the database
+ */
 @WebServlet("/test-product")
 public class ProductServlet extends HttpServlet {
 

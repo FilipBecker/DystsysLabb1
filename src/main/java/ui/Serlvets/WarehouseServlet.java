@@ -15,6 +15,14 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Servlet responsible for warehouse order management
+ *
+ * Warehouse staff and admin can use this servlet to view orders that need to be packed,
+ * view individual order details, and mark orders as packed
+ *
+ * Order operations are delegated to the {@link Facade}
+ */
 @WebServlet("/warehouse")
 public class WarehouseServlet extends HttpServlet{
 
@@ -65,6 +73,21 @@ public class WarehouseServlet extends HttpServlet{
         }
     }
 
+    /**
+     * Handles POST requests for warehouse actions.
+     *
+     * Currently, the supported action is pack, which marks
+     * the specified order as packed through the {@link Facade}.
+     *
+     * After the action has been completed, the user is redirected
+     * back to the warehouse page.
+     *
+     * @param req  the HTTP request containing the action and order ID
+     * @param resp the HTTP response used for redirecting back to the warehouse
+     * @throws ServletException if an error occurs while processing the request
+     *                           or accessing the database
+     * @throws IOException if an I/O error occurs during request processing
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if(!hasWarehouseAccess(req)){

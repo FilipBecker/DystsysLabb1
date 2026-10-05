@@ -51,22 +51,4 @@ public class DBConnection {
             e.printStackTrace();
         }
     }
-
-    /*static{
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("MySQL JDBC drivers are missing", e);
-        }
-    }*/
-
-   /* public static Connection getConnection() throws ConnectionFailExeption{
-        try{
-            return DriverManager.getConnection(server, DB_user, DB_password);
-        } catch (SQLException e){
-            throw new ConnectionFailExeption("Could not connect to database" + e.getMessage());
-        }
-    }*/
-
-
 }

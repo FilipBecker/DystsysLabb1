@@ -15,6 +15,13 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Servlet responsible for handling administartion functionality
+ *
+ * The servlet communicates with the business layer through {@link Facade}, not by accessing DAOs directly
+ *
+ * Both Administators and warehouse users are currently allowed.
+ */
 @WebServlet("/admin")
 public class AdminServlet extends HttpServlet {
 
@@ -40,6 +47,19 @@ public class AdminServlet extends HttpServlet {
         }
     }
 
+    /**
+     * The supported actions are:
+     *     createProduct
+     *     updateProduct
+     *     createCategory
+     *     updateCategory
+     *
+     * After a successful operation the user is redirected to the test-product page
+     * @param req the HTTP request containing the submitted form data
+     * @param resp the HTTP response
+     * @throws ServletException if an error occurs while processing the request
+     * @throws IOException if an input/output error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 

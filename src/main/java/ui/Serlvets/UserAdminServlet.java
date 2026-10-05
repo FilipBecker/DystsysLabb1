@@ -9,6 +9,12 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
+/**
+ * Servlet responsible for displaying the user administration page.
+ *
+ * Access to this page is restricted to users with privilege ADMIN
+ */
+
 @WebServlet("/userAdmin")
 public class UserAdminServlet extends HttpServlet {
     @Override
