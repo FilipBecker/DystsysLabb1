@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Holds the access methods for category in the database
+ * Holds the access methods for category in the database and creates Category objects
  */
 public class CategoryDAO extends Category{
 

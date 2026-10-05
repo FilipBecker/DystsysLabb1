@@ -8,17 +8,28 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Holds the access methods for order in the database and creates order objects
+ */
 public class OrderDAO extends Order{
 
-    OrderDAO() {
-        super();
-    }
-
+    /**
+     * Creates a model Order object
+     * @param id of the new order
+     * @param userId of the new order
+     * @param orderDate of the new order
+     * @param status of the new order
+     */
     public OrderDAO(int id, int userId, Timestamp orderDate, String status) {
         super(id, userId,orderDate, status);
     }
 
+    /**
+     * Creates a new order
+     * @param userId of the user which created the order
+     * @param cart holds the products and their amounts to be included in the order
+     * @throws SQLException when a problem with accessing the database happens
+     */
     public static void createOrder(int userId, List<CartItem> cart) throws SQLException {
         if (cart == null || cart.isEmpty()) throw new SQLException("Cart is empty");
 
@@ -85,6 +96,11 @@ public class OrderDAO extends Order{
 
     }
 
+    /**
+     * Finds all orders in the database
+     * @return a List with all the found orders or an empty list if none are found
+     * @throws SQLException when a problem with accessing the database happens
+     */
     public static List<Order> findAllOrders()
             throws SQLException {
 
@@ -112,6 +128,12 @@ public class OrderDAO extends Order{
 
         return orders;
     }
+
+    /**
+     * Changes an orders status from NEW to PACKED
+     * @param orderId specifying the order to be changed
+     * @throws SQLException when a problem with accessing the database happens
+     */
     public static void packOrder(int orderId)
             throws SQLException {
 
@@ -134,6 +156,12 @@ public class OrderDAO extends Order{
         }
     }
 
+    /**
+     * Finds the order with the specified id
+     * @param orderId of the order to be found
+     * @return the found order or null if none are found
+     * @throws SQLException when a problem with accessing the database happens
+     */
     public static Order findById(int orderId) throws SQLException{
         Connection conn = DBConnection.getConnection();
 
@@ -156,47 +184,34 @@ public class OrderDAO extends Order{
         return null;
     }
 
+    /**
+     * Finds all packed orders
+     * @return A list of all packed orders or an empty list if none are found
+     * @throws SQLException when a problem with accessing the database happens
+     */
     public static List<Order> findPackedOrders()
             throws SQLException {
 
         return findByStatus("PACKED");
     }
 
+    /**
+     * Finds all unpacked (NEW) orders
+     * @return A list of all packed orders or an empty list if none are found
+     * @throws SQLException when a problem with accessing the database happens
+     */
     public static List<Order> findOrdersToPack()
             throws SQLException {
 
         return findByStatus("NEW");
     }
 
-    /*public static List<OrderDAO> findPackedOrders() throws SQLException {
-
-        List<OrderDAO> orders = new ArrayList<>();
-        Connection conn = DBConnection.getConnection();
-
-
-        try (PreparedStatement statement = conn.prepareStatement(
-                "SELECT id, user_id, order_date, status " +
-                "FROM orders " +
-                "WHERE status = 'PACKED' " +
-                "ORDER BY order_date DESC");
-             ResultSet resultSet = statement.executeQuery()) {
-
-            while (resultSet.next()) {
-
-                OrderDAO order = new OrderDAO(
-                        resultSet.getInt("id"),
-                        resultSet.getInt("user_id"),
-                        resultSet.getTimestamp("order_date"),
-                        resultSet.getString("status")
-                );
-
-                orders.add(order);
-            }
-        }
-
-        return orders;
-    }*/
-
+    /**
+     * Finds all orders with the specified status
+     * @param status to search orders by
+     * @return A list of all packed orders or an empty list if none are found
+     * @throws SQLException when a problem with accessing the database happens
+     */
     private static List<Order> findByStatus(String status)
             throws SQLException {
 
