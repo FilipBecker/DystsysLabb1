@@ -331,25 +331,14 @@ public class Facade {
     public static void createProduct(String name, String description, double price, int stock, int categoryId) throws SQLException{
         validateProduct(name, price, stock);
 
-        ProductDAO product = new ProductDAO(0, name.trim(), description, price, stock, categoryId);
-
-        ProductDAO.createProduct(product);
+        ProductDAO.createProduct(name.trim(), description, price, stock, categoryId);
 
     }
 
     public static void updateProduct(int id, String name, String description, double price, int stock, int categoryId) throws SQLException{
         validateProduct(name, price, stock);
 
-        ProductDAO product = new ProductDAO(
-                id,
-                name.trim(),
-                description,
-                price,
-                stock,
-                categoryId
-        );
-
-        ProductDAO.updateProduct(product);
+        ProductDAO.updateProduct(id, name, description, price, stock, categoryId);
     }
 
     public static void createOrder(int userId, List<ViewCartItem> cart) throws SQLException {

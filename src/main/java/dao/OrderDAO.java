@@ -20,7 +20,7 @@ public class OrderDAO extends Order{
      * @param orderDate of the new order
      * @param status of the new order
      */
-    public OrderDAO(int id, int userId, Timestamp orderDate, String status) {
+    private OrderDAO(int id, int userId, Timestamp orderDate, String status) {
         super(id, userId,orderDate, status);
     }
 
