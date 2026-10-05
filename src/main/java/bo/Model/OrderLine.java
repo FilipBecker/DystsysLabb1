@@ -1,7 +1,7 @@
 package bo.Model;
 
 /**
- * Represents an order in the model
+ * Represents an order for a specific product in the model
  */
 public class OrderLine {
 

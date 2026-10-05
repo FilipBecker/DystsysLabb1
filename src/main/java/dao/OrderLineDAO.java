@@ -1,6 +1,5 @@
 package dao;
 
-import bo.Model.Order;
 import bo.Model.OrderLine;
 import Util.DBConnection;
 
@@ -11,14 +10,28 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Holds the access methods for orderLine in the database and creates model OrderLine objects
+ */
 public class OrderLineDAO extends OrderLine {
-    public OrderLineDAO(int id, int orderId, int productId, int quantity, double price) {
+    /**
+     * Creates a new model OrderLine object
+     * @param id of the new OrderLine object
+     * @param orderId of the new OrderLine object
+     * @param productId of the new OrderLine object
+     * @param quantity of the new OrderLine object
+     * @param price of the new OrderLine object
+     */
+    private OrderLineDAO(int id, int orderId, int productId, int quantity, double price) {
         super(id, orderId, productId, quantity, price);
     }
 
-    public OrderLineDAO() {
-    }
-
+    /**
+     * Finds all orderLines associated with the specified order
+     * @param orderId of the order
+     * @return A list of OrderLine objects or an empty list if none are found
+     * @throws SQLException when a problem with accessing the database happens
+     */
     public static List<OrderLine> findOrderLines(int orderId)
             throws SQLException {
 
