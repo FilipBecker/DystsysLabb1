@@ -4,6 +4,9 @@ import bo.Model.Order;
 
 import java.sql.Timestamp;
 
+/**
+ * An Order Object represented in the UI as a ViewOrder Object instead of the model version
+ */
 public class ViewOrder {
 
 

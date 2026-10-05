@@ -2,6 +2,9 @@ package ui.ViewItems;
 
 import bo.Model.Category;
 
+/**
+ * A Category Object represented in the UI as a ViewCategory Object instead of the model version
+ */
 public class ViewCategory {
     private int id;
     private String name;

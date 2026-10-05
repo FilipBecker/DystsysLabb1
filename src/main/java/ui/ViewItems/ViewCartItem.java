@@ -1,5 +1,8 @@
 package ui.ViewItems;
 
+/**
+ * A cartItem represented Object in the UI as a ViewCartItem Object instead of the model version
+ */
 public class ViewCartItem {
     private final ViewProduct product;
     private final int quantity;

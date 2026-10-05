@@ -1,7 +1,8 @@
 package bo.Model;
 
-import ui.ViewItems.ViewCartItem;
-
+/**
+ * Represents a type of product and its quantity in the users cart for the model.
+ * **/
 public class CartItem {
     private Product product;
     private int quantity;
@@ -25,6 +26,9 @@ public class CartItem {
         this.quantity = quantity;
     }
 
+    /**
+     * @return the total price of the cart item
+     */
     public double getSubtotal() {
         return product.getPrice() * quantity;
     }

@@ -1,5 +1,8 @@
 package bo.Model;
 
+/**
+ * Represents a product in the model
+ */
 public class Product {
     private int id;
     private String name;

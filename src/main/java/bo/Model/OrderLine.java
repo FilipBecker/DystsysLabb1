@@ -1,5 +1,8 @@
 package bo.Model;
 
+/**
+ * Represents an order in the model
+ */
 public class OrderLine {
 
     private int id;

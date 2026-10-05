@@ -2,6 +2,9 @@ package ui.ViewItems;
 
 import bo.Model.Product;
 
+/**
+ * A Product Object represented in the UI as a ViewProduct Object instead of the model version
+ */
 public class ViewProduct {
     private int id;
     private String name;

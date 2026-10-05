@@ -2,19 +2,32 @@ package Util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import Util.exeptions.*;
-import static java.sql.DriverManager.getConnection;
 
+
+/**
+ * Manages the connection to the webshop MySQL database
+ *
+ * This class uses the singleton design pattern to ensure that only one {@link DBConnection}
+ * instance is created during the lifetime of the application
+ *
+ * The database connection can be retrieved using {@link #getConnection()}
+ */
 public class DBConnection {
     private static DBConnection instance = null;
     private Connection conn = null;
 
+    /**
+     * @return the single DBConnection instance
+     */
     private static DBConnection getInstance(){
         if(instance == null) instance = new DBConnection();
         return instance;
     }
 
+    /**
+     * @return the JDBC connection to the webshop database
+     */
     public static Connection getConnection() {
         return getInstance().conn;
     }
@@ -27,7 +40,9 @@ public class DBConnection {
     private static final String DB_user = "webshop";
     private static final String DB_password = "webshop123";
 
-
+    /**
+     * Creates a new database connection
+     */
     private DBConnection(){
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");

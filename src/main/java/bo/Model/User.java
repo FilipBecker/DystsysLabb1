@@ -2,6 +2,9 @@ package bo.Model;
 
 import Enums.Privilege;
 
+/**
+ * Represents a user in the model
+ */
 public class User {
     private int id;
     private String username;

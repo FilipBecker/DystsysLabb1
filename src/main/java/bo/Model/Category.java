@@ -1,5 +1,8 @@
 package bo.Model;
 
+/**
+ * Represents different product categories in the model
+ */
 public class Category {
 
     private int id;

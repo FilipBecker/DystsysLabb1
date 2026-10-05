@@ -2,6 +2,9 @@ package ui.ViewItems;
 
 import bo.Model.OrderLine;
 
+/**
+ * An OrderLine Object represented in the UI as a ViewOrderLine Object instead of the model version
+ */
 public class ViewOrderLine {
 
     private int id;
