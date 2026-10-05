@@ -11,7 +11,7 @@ public class OrderLine {
     protected OrderLine() {
     }
 
-    protected OrderLine(int id, int orderId, int productId,
+    public OrderLine(int id, int orderId, int productId,
                      int quantity, double price) {
         this.id = id;
         this.orderId = orderId;

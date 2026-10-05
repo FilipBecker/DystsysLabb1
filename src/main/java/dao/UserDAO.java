@@ -11,11 +11,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDAO extends User{
+public class UserDAO{
 
-    private UserDAO(int id, String username, Privilege role, String email) {
+    /*private UserDAO(int id, String username, Privilege role, String email) {
         super(id, username, role, email);
-    }
+    }*/
 
     public static User findByUserNameAndPassword(String username, String password) throws ConnectionFailExeption, SQLException{
         Connection conn = DBConnection.getConnection();
@@ -36,7 +36,7 @@ public class UserDAO extends User{
                             default -> throw new SQLException("User has improper role: "+ resultSet.getString("role"));
                         };
                 String email = resultSet.getString("email");
-                return new UserDAO(id, username, role, email);
+                return new User(id, username, role, email);
             }
             return null;
         }
@@ -60,7 +60,7 @@ public class UserDAO extends User{
                     default -> throw new SQLException("User has improper role: "+ resultSet.getString("role"));
                 };
                 String email = resultSet.getString("email");
-                users.add(new UserDAO(id, username, role, email));
+                users.add(new User(id, username, role, email));
             }
             return users;
         }
@@ -84,7 +84,7 @@ public class UserDAO extends User{
                     default -> throw new SQLException("User has improper role: "+ resultSet.getString("role"));
                 };
                 String email = resultSet.getString("email");
-                return new UserDAO(id, username, role, email);
+                return new User(id, username, role, email);
             }
             return null;
         }
@@ -108,7 +108,7 @@ public class UserDAO extends User{
                     default -> throw new SQLException("User has improper role: "+ resultSet.getString("role"));
                 };
                 String email = resultSet.getString("email");
-                return new UserDAO(id, username, role, email);
+                return new User(id, username, role, email);
             }
             return null;
         }
@@ -127,7 +127,7 @@ public class UserDAO extends User{
                 int id = resultSet.getInt("id");
                 String username = resultSet.getString("username");
                 String email = resultSet.getString("email");
-                users.add(new UserDAO(id, username, role, email));
+                users.add(new User(id, username, role, email));
             }
             return users;
         }
@@ -151,7 +151,7 @@ public class UserDAO extends User{
                     case "CUSTOMER" -> Privilege.CUSTOMER;
                     default -> throw new SQLException("User has improper role: "+ resultSet.getString("role"));
                 };
-                users.add(new UserDAO(id, username, role, email));
+                users.add(new User(id, username, role, email));
             }
             return users;
         }

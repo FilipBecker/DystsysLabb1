@@ -11,14 +11,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductDAO extends Product{
+public class ProductDAO{
 
-    public ProductDAO(int id, String name, String description, double price, int stock, int category) {
+    /*public ProductDAO(int id, String name, String description, double price, int stock, int category) {
         super(id, name, description, price, stock, category);
-    }
+    }*/
 
-    public static List<ProductDAO> findAll() throws ConnectionFailExeption, SQLException{
-        List<ProductDAO> products = new ArrayList<>();
+    public static List<Product> findAll() throws ConnectionFailExeption, SQLException{
+        List<Product> products = new ArrayList<>();
 
         Connection conn = DBConnection.getConnection();
         try(PreparedStatement statement = conn.prepareStatement(
@@ -26,7 +26,7 @@ public class ProductDAO extends Product{
             ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
-                ProductDAO  p = new ProductDAO(
+                Product product = new Product(
                         resultSet.getInt("id"),
                         resultSet.getString("name"),
                         resultSet.getString("description"),
@@ -34,14 +34,14 @@ public class ProductDAO extends Product{
                         resultSet.getInt("stock"),
                         resultSet.getInt("category_id")
                 );
-                products.add(p);
+                products.add(product);
             }
         }
 
         return products;
     }
 
-    public static ProductDAO findById(int id) throws ConnectionFailExeption, SQLException{
+    public static Product findById(int id) throws ConnectionFailExeption, SQLException{
         Connection conn = DBConnection.getConnection();
         try(PreparedStatement statement = conn.prepareStatement(
                     "SELECT id, name, description, price, stock, category_id  FROM products WHERE id = ?"
@@ -52,7 +52,7 @@ public class ProductDAO extends Product{
 
             if (resultSet.next()) {
 
-                return new ProductDAO(
+                return new Product(
                         resultSet.getInt("id"),
                         resultSet.getString("name"),
                         resultSet.getString("description"),
@@ -67,8 +67,8 @@ public class ProductDAO extends Product{
         }
     }
 
-    public static List<ProductDAO> findByName(String name) throws ConnectionFailExeption, SQLException{
-        List<ProductDAO> products = new ArrayList<>();
+    public static List<Product> findByName(String name) throws ConnectionFailExeption, SQLException{
+        List<Product> products = new ArrayList<>();
 
         Connection conn = DBConnection.getConnection();
         try(PreparedStatement statement = conn.prepareStatement(
@@ -79,7 +79,7 @@ public class ProductDAO extends Product{
 
             while (resultSet.next()) {
 
-                ProductDAO product = new ProductDAO(
+                Product product = new Product(
                         resultSet.getInt("id"),
                         resultSet.getString("name"),
                         resultSet.getString("description"),
@@ -95,7 +95,7 @@ public class ProductDAO extends Product{
     }
 
 
-    public static void createProduct(ProductDAO  product) throws SQLException{
+    public static void createProduct(Product  product) throws SQLException{
         Connection conn = DBConnection.getConnection();
 
         try(PreparedStatement statement = conn.prepareStatement("INSERT INTO products " +
@@ -111,7 +111,7 @@ public class ProductDAO extends Product{
         }
     }
 
-    public static void updateProduct(ProductDAO  product) throws SQLException {
+    public static void updateProduct(Product   product) throws SQLException {
 
         Connection conn = DBConnection.getConnection();
 

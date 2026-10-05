@@ -4,9 +4,7 @@ import Enums.DeleteType;
 import Enums.SearchType;
 import Enums.Privilege;
 import Exeptions.NoSuchUserExeption;
-import Model.CartItem;
-import Model.Product;
-import Model.User;
+import Model.*;
 import Util.exeptions.ConnectionFailExeption;
 import com.mysql.cj.jdbc.exceptions.NotUpdatable;
 import dao.OrderDAO;
@@ -19,7 +17,6 @@ import ui.ViewUser;
 import dao.*;
 import ui.*;
 import Model.User;
-import Model.Category;
 import dao.CategoryDAO;
 
 import java.sql.SQLException;
@@ -35,8 +32,15 @@ public class Facade {
     }
 
     public static List<ViewProduct> getAllProducts() throws SQLException {
-        return toViewProductList(ProductDAO.findAll());
+        //return toViewProductList(ProductDAO.findAll());
 
+        List<ViewProduct> products = new ArrayList<>();
+
+        for (Product product : ProductDAO.findAll()) {
+            products.add(new ViewProduct(product));
+        }
+
+        return products;
     }
 
     public static ViewProduct getProductById(int id) throws  SQLException {
@@ -46,10 +50,18 @@ public class Facade {
     }
 
     public static List<ViewProduct> getProductByName(String name) throws SQLException{
-        return toViewProductList(ProductDAO.findByName(name));
+        //return toViewProductList(ProductDAO.findByName(name));
+
+        List<ViewProduct> products = new ArrayList<>();
+
+        for (Product product : ProductDAO.findByName(name)) {
+            products.add(new ViewProduct(product));
+        }
+
+        return products;
     }
 
-    private static List<ViewProduct> toViewProductList(List<ProductDAO> products) {
+    private static List<ViewProduct> toViewProductList(List<Product> products) {
         if (products == null || products.isEmpty()) {
             return null;
         }
@@ -165,22 +177,31 @@ public class Facade {
         }
         return viewUsers;
     }
-    public static List<CategoryDAO> getAllCategories() throws SQLException {
-        return CategoryDAO.findAll();
+    public static List<ViewCategory> getAllCategories() throws SQLException {
+        //return CategoryDAO.findAll();
+
+        List<ViewCategory> products = new ArrayList<>();
+
+        for (Category category : CategoryDAO.findAll()) {
+            products.add(new ViewCategory(category));
+        }
+
+        return products;
     }
 
-    public static Category getCategoryById(int id) throws SQLException {
+    /*public static ViewCategory getCategoryById(int id) throws SQLException {
         return CategoryDAO.findById(id);
     }
 
-    public static Category getCategoryByName(String name) throws SQLException {
+    public static ViewCategory getCategoryByName(String name) throws SQLException {
         return CategoryDAO.findByName(name);
-    }
+
+    }*/
 
     public static void createCategory(String name) throws SQLException{
         if(name == null || name.trim().isEmpty()) throw new SQLException("Category name can't be empty");
 
-        CategoryDAO category = new CategoryDAO();
+        Category category = new Category();
         category.setName(name.trim());
 
         CategoryDAO.createCategory(category);
@@ -189,7 +210,7 @@ public class Facade {
     public static void updateCategory(int id, String name) throws SQLException{
         if(name == null || name.trim().isEmpty()) throw new SQLException("Category name can't be empty");
 
-        CategoryDAO category = new CategoryDAO();
+        Category category = new Category();
         category.setId(id);
         category.setName(name);
 
@@ -199,7 +220,7 @@ public class Facade {
     public static void createProduct(String name, String description, double price, int stock, int categoryId) throws SQLException{
         validateProduct(name, price, stock);
 
-        ProductDAO  product = new ProductDAO(0, name.trim(), description, price, stock, categoryId);
+        Product  product = new Product(0, name.trim(), description, price, stock, categoryId);
 
         ProductDAO.createProduct(product);
 
@@ -208,7 +229,7 @@ public class Facade {
     public static void updateProduct(int id, String name, String description, double price, int stock, int categoryId) throws SQLException{
         validateProduct(name, price, stock);
 
-        ProductDAO product = new ProductDAO(
+        Product product = new Product(
                 id,
                 name.trim(),
                 description,
@@ -261,7 +282,7 @@ public class Facade {
 
         List<ViewOrder> orders = new ArrayList<>();
 
-        for (OrderDAO order : OrderDAO.findOrdersToPack()) {
+        for (Order order : OrderDAO.findOrdersToPack()) {
             orders.add(new ViewOrder(order));
         }
 
@@ -273,7 +294,7 @@ public class Facade {
 
         List<ViewOrderLine> lines = new ArrayList<>();
 
-        for (OrderLineDAO line : OrderLineDAO.findOrderLines(orderId)) {
+        for (OrderLine line : OrderLineDAO.findOrderLines(orderId)) {
             lines.add(new ViewOrderLine(line));
         }
 
@@ -289,7 +310,7 @@ public class Facade {
     public static ViewOrder getOrderById(int orderId)
             throws SQLException {
 
-        OrderDAO order =
+        Order order =
                 OrderDAO.findById(orderId);
 
         if (order == null) {
@@ -304,7 +325,7 @@ public class Facade {
 
         List<ViewOrder> orders = new ArrayList<>();
 
-        for (OrderDAO order : OrderDAO.findPackedOrders()) {
+        for (Order order : OrderDAO.findPackedOrders()) {
             orders.add(new ViewOrder(order));
         }
 
@@ -347,4 +368,5 @@ public class Facade {
             throw new IllegalArgumentException("Invalid deletion method");
         }
     }
+
 }

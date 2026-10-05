@@ -12,7 +12,7 @@ public class Order {
     protected Order() {
     }
 
-    protected Order(int id, int userId, Timestamp orderDate, String status) {
+    public Order(int id, int userId, Timestamp orderDate, String status) {
         this.id = id;
         this.userId = userId;
         this.orderDate = orderDate;
