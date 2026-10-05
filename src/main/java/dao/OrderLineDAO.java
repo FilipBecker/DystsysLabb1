@@ -10,18 +10,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderLineDAO extends OrderLine{
-    public OrderLineDAO(int id, int orderId, int productId, int quantity, double price) {
+public class OrderLineDAO{
+    /*public OrderLineDAO(int id, int orderId, int productId, int quantity, double price) {
         super(id, orderId, productId, quantity, price);
     }
 
     public OrderLineDAO() {
-    }
+    }*/
 
-    public static List<OrderLineDAO> findOrderLines(int orderId)
+    public static List<OrderLine> findOrderLines(int orderId)
             throws SQLException {
 
-        List<OrderLineDAO> lines = new ArrayList<>();
+        List<OrderLine> lines = new ArrayList<>();
 
         Connection conn = DBConnection.getConnection();
         try (PreparedStatement statement =
@@ -37,7 +37,7 @@ public class OrderLineDAO extends OrderLine{
 
                 while (resultSet.next()) {
 
-                    OrderLineDAO line = new OrderLineDAO(
+                    OrderLine line = new OrderLine(
                             resultSet.getInt("id"),
                             resultSet.getInt("order_id"),
                             resultSet.getInt("product_id"),

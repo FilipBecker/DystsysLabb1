@@ -10,18 +10,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryDAO extends Category{
+public class CategoryDAO{
 
-    public CategoryDAO() {
+    /*public CategoryDAO() {
         super();
     }
 
     public CategoryDAO(int id, String name) {
         super(id, name);
-    }
+    }*/
 
-    public static List<CategoryDAO> findAll() throws SQLException {
-        List<CategoryDAO> categories = new ArrayList<>();
+    public static List<Category> findAll() throws SQLException {
+        List<Category> categories = new ArrayList<>();
 
         Connection conn = DBConnection.getConnection();
 
@@ -29,7 +29,7 @@ public class CategoryDAO extends Category{
              ResultSet resultSet = statement.executeQuery()) {
 
             while(resultSet.next()) {
-                CategoryDAO category = new CategoryDAO(
+                Category category = new Category(
                         resultSet.getInt("id"),
                         resultSet.getString("name")
                 );
@@ -40,7 +40,7 @@ public class CategoryDAO extends Category{
         return categories;
     }
 
-    public static CategoryDAO findById(int id) throws SQLException{
+    public static Category findById(int id) throws SQLException{
         Connection conn = DBConnection.getConnection();
 
         try(PreparedStatement statement = conn.prepareStatement("SELECT id, name FROM categories WHERE id = ?")){
@@ -49,7 +49,7 @@ public class CategoryDAO extends Category{
 
             try(ResultSet resultSet= statement.executeQuery()){
                 if(resultSet.next()){
-                    return new CategoryDAO(
+                    return new Category(
                             resultSet.getInt("id"),
                             resultSet.getString("name")
                     );
@@ -60,7 +60,7 @@ public class CategoryDAO extends Category{
         }
     }
 
-    public static CategoryDAO findByName(String name) throws SQLException{
+    public static Category findByName(String name) throws SQLException{
         Connection conn = DBConnection.getConnection();
 
         try(PreparedStatement statement = conn.prepareStatement("SELECT id, name FROM categories WHERE name = ?")){
@@ -69,7 +69,7 @@ public class CategoryDAO extends Category{
 
             try(ResultSet resultSet= statement.executeQuery()){
                 if(resultSet.next()){
-                    return new CategoryDAO(
+                    return new Category(
                             resultSet.getInt("id"),
                             resultSet.getString("name")
                     );
@@ -80,7 +80,7 @@ public class CategoryDAO extends Category{
         }
     }
 
-    public static void createCategory(CategoryDAO category) throws SQLException{
+    public static void createCategory(Category category) throws SQLException{
         Connection conn = DBConnection.getConnection();
 
         try(PreparedStatement statement = conn.prepareStatement("INSERT INTO categories (name) VALUES (?)")){
@@ -89,7 +89,7 @@ public class CategoryDAO extends Category{
         }
     }
 
-    public static void updateCategory(CategoryDAO category) throws SQLException {
+    public static void updateCategory(Category category) throws SQLException {
         Connection conn = DBConnection.getConnection();
 
         try(PreparedStatement statement = conn.prepareStatement("UPDATE categories SET NAME = ? WHERE id = ?")){

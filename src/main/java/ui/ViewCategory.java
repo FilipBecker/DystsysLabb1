@@ -1,16 +1,17 @@
-package Model;
+package ui;
 
-public class Category {
+import Model.Category;
 
+public class ViewCategory {
     private int id;
     private String name;
 
-    public Category( int id, String name) {
-        this.name = name;
-        this.id = id;
+    public ViewCategory(Category category) {
+        name = category.getName();
+        id = category.getId();
     }
 
-    public Category() {
+    public ViewCategory() {
     }
 
     public int getId() {

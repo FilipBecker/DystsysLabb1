@@ -31,8 +31,8 @@ public class AdminServlet extends HttpServlet {
 
         try{
 
-            List<ProductDAO> products = ProductDAO.findAll();
-            List<CategoryDAO> categories = CategoryDAO.findAll();
+            List<ViewProduct> products = Facade.getAllProducts();
+            List<ViewCategory> categories = Facade.getAllCategories();
 
             req.setAttribute("products", products);
             req.setAttribute("categories", categories);

@@ -10,15 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class OrderDAO extends Order {
+public class OrderDAO{
 
-    public OrderDAO() {
+    /* OrderDAO() {
         super();
     }
 
     public OrderDAO(int id, int userId, Timestamp orderDate, String status) {
         super(id, userId,orderDate, status);
-    }
+    }*/
 
     public static void createOrder(int userId, List<CartItem> cart) throws SQLException {
         if (cart == null || cart.isEmpty()) throw new SQLException("Cart is empty");
@@ -86,10 +86,10 @@ public class OrderDAO extends Order {
 
     }
 
-    public static List<OrderDAO> findAllOrders()
+    public static List<Order> findAllOrders()
             throws SQLException {
 
-        List<OrderDAO> orders = new ArrayList<>();
+        List<Order> orders = new ArrayList<>();
 
         Connection conn = DBConnection.getConnection();
         try (PreparedStatement statement =
@@ -100,7 +100,7 @@ public class OrderDAO extends Order {
 
             while (resultSet.next()) {
 
-                OrderDAO order = new OrderDAO(
+                Order order = new Order(
                         resultSet.getInt("id"),
                         resultSet.getInt("user_id"),
                         resultSet.getTimestamp("order_date"),
@@ -135,7 +135,7 @@ public class OrderDAO extends Order {
         }
     }
 
-    public static List<OrderDAO> findOrdersToPack()
+    /*public static List<OrderDAO> findOrdersToPack()
             throws SQLException {
 
         List<OrderDAO> orders = new ArrayList<>();
@@ -162,9 +162,9 @@ public class OrderDAO extends Order {
         }
 
         return orders;
-    }
+    }*/
 
-    public static OrderDAO findById(int orderId) throws SQLException{
+    public static Order findById(int orderId) throws SQLException{
         Connection conn = DBConnection.getConnection();
 
         try(PreparedStatement statement = conn.prepareStatement("SELECT id, user_id, order_date, status " +
@@ -174,7 +174,7 @@ public class OrderDAO extends Order {
 
             try(ResultSet resultSet = statement.executeQuery()){
                 if(resultSet.next()){
-                    return new OrderDAO(
+                    return new Order(
                             resultSet.getInt("id"),
                             resultSet.getInt("user_id"),
                             resultSet.getTimestamp("order_date"),
@@ -186,8 +186,19 @@ public class OrderDAO extends Order {
         return null;
     }
 
+    public static List<Order> findPackedOrders()
+            throws SQLException {
 
-    public static List<OrderDAO> findPackedOrders() throws SQLException {
+        return findByStatus("PACKED");
+    }
+
+    public static List<Order> findOrdersToPack()
+            throws SQLException {
+
+        return findByStatus("NEW");
+    }
+
+    /*public static List<OrderDAO> findPackedOrders() throws SQLException {
 
         List<OrderDAO> orders = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
@@ -210,6 +221,42 @@ public class OrderDAO extends Order {
                 );
 
                 orders.add(order);
+            }
+        }
+
+        return orders;
+    }*/
+
+    private static List<Order> findByStatus(String status)
+            throws SQLException {
+
+        List<Order> orders = new ArrayList<>();
+
+        Connection conn = DBConnection.getConnection();
+
+
+        try (PreparedStatement statement =
+                     conn.prepareStatement("SELECT id, user_id, order_date, status " +
+                             "FROM orders " +
+                             "WHERE status = ? " +
+                             "ORDER BY order_date DESC")) {
+
+            statement.setString(1, status);
+
+            try (ResultSet resultSet =
+                         statement.executeQuery()) {
+
+                while (resultSet.next()) {
+
+                    Order order = new Order(
+                            resultSet.getInt("id"),
+                            resultSet.getInt("user_id"),
+                            resultSet.getTimestamp("order_date"),
+                            resultSet.getString("status")
+                    );
+
+                    orders.add(order);
+                }
             }
         }
 
