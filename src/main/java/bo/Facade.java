@@ -126,12 +126,6 @@ public class Facade {
         return login(username, password);
     }
 
-    public static void placeOrder(int userId, List<ViewCartItem> cart)
-            throws SQLException {
-
-        OrderDAO.createOrder(userId, cart);
-    }
-
     public static List<ViewUser> getUsers(String searchType, String searchValue) throws IllegalArgumentException, SQLException {
         SearchType search;
         if (searchType != null) {
