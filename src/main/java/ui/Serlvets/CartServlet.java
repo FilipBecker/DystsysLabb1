@@ -1,6 +1,6 @@
 package ui.Serlvets;
 
-import bo.Model.CartItem;
+
 import bo.Facade;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,16 +24,15 @@ public class CartServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
 
-        List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
+        List<ViewCartItem> cart = (List<ViewCartItem>) session.getAttribute("cart");
         if (cart == null) {
             cart = new ArrayList<>();
             session.setAttribute("cart", cart);
         }
 
-        List<ViewCartItem> viewCart = Facade.getCartView(cart);
         double total = Facade.getTotal(cart);
 
-        req.setAttribute("cart", viewCart);
+        req.setAttribute("cart", cart);
         req.setAttribute("total", total);
         req.getRequestDispatcher("/cart.jsp").forward(req, resp);
     }
@@ -41,6 +40,8 @@ public class CartServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
+
+        List<ViewCartItem> cart = new ArrayList<>();
 
         String action = req.getParameter("action");
 
@@ -66,7 +67,7 @@ public class CartServlet extends HttpServlet {
                 return;
             }
 
-            List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
+            /*List<ViewCartItem>*/ cart = (List<ViewCartItem>) session.getAttribute("cart");
 
             if(cart == null || cart.isEmpty()){
                 session.setAttribute("error", "Your cart is empty");
@@ -93,7 +94,7 @@ public class CartServlet extends HttpServlet {
         /*
         Add product to cart
         */
-        List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
+        /*List<ViewCartItem> */cart = (List<ViewCartItem>) session.getAttribute("cart");
         if(cart == null) cart = new ArrayList<>();
 
         try{

@@ -80,7 +80,7 @@ public class Facade {
         return viewItems;
     }
 
-    public static List<CartItem> addToCart(List<CartItem> cart, int id, int quantity) throws SQLException{
+    public static List<ViewCartItem> addToCart(List<ViewCartItem> cart, int id, int quantity) throws SQLException{
         Product product = ProductDAO.findById(id);
 
         if (product == null) {
@@ -89,7 +89,7 @@ public class Facade {
 
         int currentQuantity = 0;
 
-        for (CartItem item : cart) {
+        for (ViewCartItem item : cart) {
             if (item.getProduct().getId() == product.getId()) {
                 currentQuantity = item.getQuantity();
                 break;
@@ -126,7 +126,7 @@ public class Facade {
         return login(username, password);
     }
 
-    public static void placeOrder(int userId, List<CartItem> cart)
+    public static void placeOrder(int userId, List<ViewCartItem> cart)
             throws SQLException {
 
         OrderDAO.createOrder(userId, cart);
@@ -236,7 +236,7 @@ public class Facade {
         ProductDAO.updateProduct(product);
     }
 
-    public static void createOrder(int userId, List<CartItem> cart) throws SQLException {
+    public static void createOrder(int userId, List<ViewCartItem> cart) throws SQLException {
 
         OrderDAO.createOrder(userId, cart);
     }
@@ -371,7 +371,7 @@ public class Facade {
         return user;
     }
 
-    public static List<CartItem> addToCart(List<CartItem> cart, Product product, int quantity){
+    public static List<ViewCartItem> addToCart(List<ViewCartItem> cart, Product product, int quantity){
         if(cart == null){
             cart = new ArrayList<>();
         }
@@ -379,23 +379,27 @@ public class Facade {
         /*
         Checking if the product already exists in the cart, if true then increase the quantity of that item
          */
-        for(CartItem item : cart){
+        for(ViewCartItem item : cart){
             if(item.getProduct().getId() == product.getId()){
-                item.setQuantity(item.getQuantity() + quantity);
+                cart.remove(item);
+                item = new ViewCartItem(item.getProduct(), item.getQuantity() + quantity);
+                cart.add(item);
                 return cart;
             }
         }
 
+
+
         /*
         Else add the product to the cart
          */
-        cart.add(new CartItem(product, quantity));
+        cart.add(new ViewCartItem(new ViewProduct(product), quantity));
         return cart;
     }
 
-    public static double getTotal(List<CartItem> cart){
+    public static double getTotal(List<ViewCartItem> cart){
         if(cart == null) return 0;
-        return cart.stream().mapToDouble(CartItem::getSubtotal).sum();
+        return cart.stream().mapToDouble(ViewCartItem::getSubtotal).sum();
     }
 
 }

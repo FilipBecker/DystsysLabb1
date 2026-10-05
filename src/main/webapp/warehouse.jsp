@@ -1,5 +1,5 @@
 <%@ page import="java.util.List" %>
-<%@ page import="ui.ViewOrder" %>
+<%@ page import="ui.ViewItems.ViewOrder" %>
 
 <%@ page contentType="text/html;charset=UTF-8" %>
 

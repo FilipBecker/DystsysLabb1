@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
-<%@ page import="ui.ViewProduct" %>
+<%@ page import="ui.ViewItems.ViewProduct" %>
 <html>
 <head>
     <title>All Products</title>

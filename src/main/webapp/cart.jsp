@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
-<%@ page import="ui.ViewProduct" %>
-<%@ page import="ui.ViewCartItem" %>
+<%@ page import="ui.ViewItems.ViewProduct" %>
+<%@ page import="ui.ViewItems.ViewCartItem" %>
 <html>
 <head>
     <title>Cart</title>

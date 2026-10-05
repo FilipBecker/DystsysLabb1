@@ -1,5 +1,7 @@
 package bo.Model;
 
+import ui.ViewItems.ViewCartItem;
+
 public class CartItem {
     private Product product;
     private int quantity;

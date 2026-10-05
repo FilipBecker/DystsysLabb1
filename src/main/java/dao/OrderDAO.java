@@ -3,6 +3,7 @@ package dao;
 import bo.Model.CartItem;
 import bo.Model.Order;
 import Util.DBConnection;
+import ui.ViewItems.ViewCartItem;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class OrderDAO extends Order{
         super(id, userId,orderDate, status);
     }
 
-    public static void createOrder(int userId, List<CartItem> cart) throws SQLException {
+    public static void createOrder(int userId, List<ViewCartItem> cart) throws SQLException {
         if (cart == null || cart.isEmpty()) throw new SQLException("Cart is empty");
 
         Connection conn = DBConnection.getConnection();
@@ -41,7 +42,7 @@ public class OrderDAO extends Order{
                 }
             }
 
-            for (CartItem item : cart) {
+            for (ViewCartItem item : cart) {
                 int productId = item.getProduct().getId();
                 int quantity = item.getQuantity();
                 double price = item.getProduct().getPrice();
@@ -133,35 +134,6 @@ public class OrderDAO extends Order{
             }
         }
     }
-
-    /*public static List<OrderDAO> findOrdersToPack()
-            throws SQLException {
-
-        List<OrderDAO> orders = new ArrayList<>();
-
-        Connection conn = DBConnection.getConnection();
-        try (PreparedStatement statement =
-                     conn.prepareStatement("SELECT id, user_id, order_date, status " +
-                             "FROM orders " +
-                             "WHERE status = 'NEW' " +
-                             "ORDER BY order_date ASC");
-             ResultSet resultSet = statement.executeQuery()) {
-
-            while (resultSet.next()) {
-
-                OrderDAO order = new OrderDAO(
-                        resultSet.getInt("id"),
-                        resultSet.getInt("user_id"),
-                        resultSet.getTimestamp("order_date"),
-                        resultSet.getString("status")
-                );
-
-                orders.add(order);
-            }
-        }
-
-        return orders;
-    }*/
 
     public static Order findById(int orderId) throws SQLException{
         Connection conn = DBConnection.getConnection();
