@@ -18,16 +18,21 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Provides a simplified interface between the UI layer and the Data access layer
+ *
+ * The Facade is responsible for:
+ *      Calling the appropriate DAO methods
+ *      Converting Model objects into View objects
+ *      Validating input before passing it to the DAO layer
+ *      Handling application level operations
+ * The UI Layer should communicate with the database through this class instead of accessing DAOs directly
+ *
+ */
 
 public class Facade {
-    /*public static ViewItem getItem() {
-        TestItem testItem = new TestItem("Test", 100);
-        return new ViewItem(testItem);
-    }*/
 
     public static List<ViewProduct> getAllProducts() throws SQLException {
-        //return toViewProductList(ProductDAO.findAll());
 
         List<ViewProduct> products = new ArrayList<>();
 
@@ -45,7 +50,6 @@ public class Facade {
     }
 
     public static List<ViewProduct> getProductByName(String name) throws SQLException{
-        //return toViewProductList(ProductDAO.findByName(name));
 
         List<ViewProduct> products = new ArrayList<>();
 
@@ -80,6 +84,18 @@ public class Facade {
         return viewItems;
     }
 
+    /**
+     * Adds a product to a shopping cart
+     *
+     * Checks that the requested quantity does not exceed the available stock. If the product
+     * already exists in the cart, its quantity is increased.
+     *
+     * @param cart the current shopping cart
+     * @param id the ID of the product to add
+     * @param quantity quantity to add
+     * @return the updated shopping cart
+     * @throws SQLException if the product can't be found or there isn't enough stock
+     */
     public static List<ViewCartItem> addToCart(List<ViewCartItem> cart, int id, int quantity) throws SQLException{
         Product product = ProductDAO.findById(id);
 
@@ -107,13 +123,54 @@ public class Facade {
         return addToCart(cart, product, quantity);
     }
 
-
-    /*public static double getTotal(List<CartItem> cart) {
-        if (cart == null || cart.isEmpty()) {
-            return 0;
+    /**
+     * Adds a product to a shopping cart
+     *
+     *  If the product already exists in the cart, its quantity is increased.
+     *  Otherwise, a new cart item is created.
+     *
+     * @param cart the current shopping cart
+     * @param product the product to add
+     * @param quantity the quantity to add
+     * @return the updated shopping cart
+     */
+    public static List<ViewCartItem> addToCart(List<ViewCartItem> cart, Product product, int quantity){
+        if(cart == null){
+            cart = new ArrayList<>();
         }
-        return CartService.getTotal(cart);
-    }*/
+
+        /*
+        Checking if the product already exists in the cart, if true then increase the quantity of that item
+         */
+        for(ViewCartItem item : cart){
+            if(item.getProduct().getId() == product.getId()){
+                cart.remove(item);
+                item = new ViewCartItem(item.getProduct(), item.getQuantity() + quantity);
+                cart.add(item);
+                return cart;
+            }
+        }
+
+
+
+        /*
+        Else add the product to the cart
+         */
+        cart.add(new ViewCartItem(new ViewProduct(product), quantity));
+        return cart;
+    }
+
+    /**
+     * Calculates the total value of all items in a shopping cart
+     * @param cart the shopping cart
+     * @return the total value of the cart
+     */
+    public static double getTotal(List<ViewCartItem> cart){
+        if(cart == null) return 0;
+        return cart.stream().mapToDouble(ViewCartItem::getSubtotal).sum();
+    }
+
+
 
     //This should never return null
     public static Privilege validateUser(String username, String password) throws NoSuchUserExeption, SQLException {
@@ -132,6 +189,14 @@ public class Facade {
         OrderDAO.createOrder(userId, cart);
     }
 
+    /**
+     * Retrieves users according to a selected search criteria
+     * @param searchType
+     * @param searchValue
+     * @return a list of matching {@link ViewUser} objects
+     * @throws IllegalArgumentException if a database error occurs
+     * @throws SQLException if the username or password is invalid
+     */
     public static List<ViewUser> getUsers(String searchType, String searchValue) throws IllegalArgumentException, SQLException {
         SearchType search;
         if (searchType != null) {
@@ -172,8 +237,66 @@ public class Facade {
         }
         return viewUsers;
     }
+
+    public static User login(String username, String password) throws ConnectionFailExeption, SQLException, NoSuchUserExeption {
+        if (username == null || username.isEmpty() || password == null || password.isEmpty()) throw new NoSuchUserExeption("Invalid user name or password");
+        User user = UserDAO.findByUserNameAndPassword(username, password);
+        if (user == null) throw new NoSuchUserExeption("Invalid user name or password");
+        return user;
+    }
+
+    public static void addUser(String userName, String password, String role, String email) throws IllegalArgumentException, SQLException {
+        if (userName == null || userName.isEmpty()) {
+            throw new IllegalArgumentException("Invalid username: " +userName);
+        } else if (password == null || password.isEmpty()) {
+            throw new IllegalArgumentException("Invalid password:" +password);
+        } else if (role == null || role.isEmpty() || (!role.equals("WAREHOUSE") && !role.equals("CUSTOMER"))) {
+            throw new IllegalArgumentException("Invalid role");
+        }
+
+        Privilege privilege = Privilege.valueOf(role);
+        UserDAO.add(userName, password, privilege, email);
+
+    }
+
+    public static void deleteUser(String deleteType, String deleteValue) throws IllegalArgumentException, SQLException, NoSuchUserExeption {
+        if (deleteType == null || deleteType.isEmpty()) {
+            throw new IllegalArgumentException("Select a parameter to delete by");
+        } else if (deleteValue == null || deleteValue.isEmpty()) {
+            throw new IllegalArgumentException("Give a value to delete by");
+        }
+        try {
+            switch (DeleteType.valueOf(deleteType)) {
+                case ID:
+                    int id = Integer.parseInt(deleteValue);
+                    User userById = UserDAO.getUserById(id);
+                    if (userById == null) {
+                        throw new NoSuchUserExeption("No user with given id");
+                    } else if (userById.getRole() == Privilege.ADMIN) {
+                        throw new NoSuchUserExeption("Can not delete an admin");
+                    } else {
+                        UserDAO.deleteById(Integer.parseInt(deleteValue));
+                    }
+                    break;
+                case USERNAME:
+                    User userByUsername = UserDAO.getUserByUsername(deleteValue);
+                    if (userByUsername == null) {
+                        throw new NoSuchUserExeption("No user with given id");
+                    } else if (userByUsername.getRole() == Privilege.ADMIN) {
+                        throw new NoSuchUserExeption("Can not delete an admin");
+                    } else {
+                        UserDAO.deleteByUsername(deleteValue);
+                    }
+                    break;
+            }
+        }catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid id value: "+deleteValue);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid deletion method");
+        }
+    }
+
     public static List<ViewCategory> getAllCategories() throws SQLException {
-        //return CategoryDAO.findAll();
 
         List<ViewCategory> products = new ArrayList<>();
 
@@ -184,15 +307,13 @@ public class Facade {
         return products;
     }
 
-    /*public static ViewCategory getCategoryById(int id) throws SQLException {
-        return CategoryDAO.findById(id);
-    }
 
-    public static ViewCategory getCategoryByName(String name) throws SQLException {
-        return CategoryDAO.findByName(name);
-
-    }*/
-
+    /**
+     * Creates a new product category.
+     *
+     * @param name the name of the category
+     * @throws SQLException if the category name is invalid or a database error occurs
+     */
     public static void createCategory(String name) throws SQLException{
         if(name == null || name.trim().isEmpty()) throw new SQLException("Category name can't be empty");
 
@@ -202,6 +323,13 @@ public class Facade {
         CategoryDAO.createCategory(category);
     }
 
+    /**
+     * Updates an existing product category.
+     *
+     * @param id the ID of the category
+     * @param name the new category name
+     * @throws SQLException if the category name is invalid or a database error occurs
+     */
     public static void updateCategory(int id, String name) throws SQLException{
         if(name == null || name.trim().isEmpty()) throw new SQLException("Category name can't be empty");
 
@@ -257,21 +385,12 @@ public class Facade {
         }
     }
 
-
-    public static void addUser(String userName, String password, String role, String email) throws IllegalArgumentException, SQLException {
-        if (userName == null || userName.isEmpty()) {
-            throw new IllegalArgumentException("Invalid username: " +userName);
-        } else if (password == null || password.isEmpty()) {
-            throw new IllegalArgumentException("Invalid password:" +password);
-        } else if (role == null || role.isEmpty() || (!role.equals("WAREHOUSE") && !role.equals("CUSTOMER"))) {
-            throw new IllegalArgumentException("Invalid role");
-        }
-
-        Privilege privilege = Privilege.valueOf(role);
-        UserDAO.add(userName, password, privilege, email);
-
-    }
-
+    /**
+     * Retrieves all orders that have the status NEW and are ready to be packed by warehouse staff.
+     *
+     * @return a list of orders waiting to be packed
+     * @throws SQLException if a database error occurs
+     */
     public static List<ViewOrder> getOrdersToPack()
             throws SQLException {
 
@@ -284,6 +403,13 @@ public class Facade {
         return orders;
     }
 
+    /**
+     * Retrieves all order lines belonging to an order.
+     *
+     * @param orderId the ID of the order
+     * @return a list of {@link ViewOrderLine} objects
+     * @throws SQLException if a database error occurs
+     */
     public static List<ViewOrderLine> getOrderLines(int orderId)
             throws SQLException {
 
@@ -296,6 +422,13 @@ public class Facade {
         return lines;
     }
 
+    /**
+     * Changes an order's status from NEW to PACKED.
+     *
+     * @param orderId the ID of the order to pack
+     * @throws SQLException if the order cannot be packed
+     *         or a database error occurs
+     */
     public static void packOrder(int orderId)
             throws SQLException {
 
@@ -327,79 +460,5 @@ public class Facade {
         return orders;
     }
 
-    public static void deleteUser(String deleteType, String deleteValue) throws IllegalArgumentException, SQLException, NoSuchUserExeption {
-        if (deleteType == null || deleteType.isEmpty()) {
-            throw new IllegalArgumentException("Select a parameter to delete by");
-        } else if (deleteValue == null || deleteValue.isEmpty()) {
-            throw new IllegalArgumentException("Give a value to delete by");
-        }
-        try {
-            switch (DeleteType.valueOf(deleteType)) {
-                case ID:
-                    int id = Integer.parseInt(deleteValue);
-                    User userById = UserDAO.getUserById(id);
-                    if (userById == null) {
-                        throw new NoSuchUserExeption("No user with given id");
-                    } else if (userById.getRole() == Privilege.ADMIN) {
-                        throw new NoSuchUserExeption("Can not delete an admin");
-                    } else {
-                        UserDAO.deleteById(Integer.parseInt(deleteValue));
-                    }
-                    break;
-                case USERNAME:
-                    User userByUsername = UserDAO.getUserByUsername(deleteValue);
-                    if (userByUsername == null) {
-                        throw new NoSuchUserExeption("No user with given id");
-                    } else if (userByUsername.getRole() == Privilege.ADMIN) {
-                        throw new NoSuchUserExeption("Can not delete an admin");
-                    } else {
-                        UserDAO.deleteByUsername(deleteValue);
-                    }
-                    break;
-            }
-        }catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid id value: "+deleteValue);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid deletion method");
-        }
-    }
-
-    public static User login(String username, String password) throws ConnectionFailExeption, SQLException, NoSuchUserExeption {
-        if (username == null || username.isEmpty() || password == null || password.isEmpty()) throw new NoSuchUserExeption("Invalid user name or password");
-        User user = UserDAO.findByUserNameAndPassword(username, password);
-        if (user == null) throw new NoSuchUserExeption("Invalid user name or password");
-        return user;
-    }
-
-    public static List<ViewCartItem> addToCart(List<ViewCartItem> cart, Product product, int quantity){
-        if(cart == null){
-            cart = new ArrayList<>();
-        }
-
-        /*
-        Checking if the product already exists in the cart, if true then increase the quantity of that item
-         */
-        for(ViewCartItem item : cart){
-            if(item.getProduct().getId() == product.getId()){
-                cart.remove(item);
-                item = new ViewCartItem(item.getProduct(), item.getQuantity() + quantity);
-                cart.add(item);
-                return cart;
-            }
-        }
-
-
-
-        /*
-        Else add the product to the cart
-         */
-        cart.add(new ViewCartItem(new ViewProduct(product), quantity));
-        return cart;
-    }
-
-    public static double getTotal(List<ViewCartItem> cart){
-        if(cart == null) return 0;
-        return cart.stream().mapToDouble(ViewCartItem::getSubtotal).sum();
-    }
 
 }
