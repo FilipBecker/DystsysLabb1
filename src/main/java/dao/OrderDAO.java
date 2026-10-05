@@ -3,7 +3,6 @@ package dao;
 import bo.Model.CartItem;
 import bo.Model.Order;
 import Util.DBConnection;
-import ui.ViewItems.ViewCartItem;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ public class OrderDAO extends Order{
         super(id, userId,orderDate, status);
     }
 
-    public static void createOrder(int userId, List<ViewCartItem> cart) throws SQLException {
+    public static void createOrder(int userId, List<CartItem> cart) throws SQLException {
         if (cart == null || cart.isEmpty()) throw new SQLException("Cart is empty");
 
         Connection conn = DBConnection.getConnection();
@@ -42,7 +41,7 @@ public class OrderDAO extends Order{
                 }
             }
 
-            for (ViewCartItem item : cart) {
+            for (CartItem item : cart) {
                 int productId = item.getProduct().getId();
                 int quantity = item.getQuantity();
                 double price = item.getProduct().getPrice();

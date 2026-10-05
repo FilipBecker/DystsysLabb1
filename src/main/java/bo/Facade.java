@@ -237,8 +237,11 @@ public class Facade {
     }
 
     public static void createOrder(int userId, List<ViewCartItem> cart) throws SQLException {
-
-        OrderDAO.createOrder(userId, cart);
+        List<CartItem> modelCart = new ArrayList<>();
+        for (ViewCartItem v: cart) {
+            modelCart.add(new CartItem(ProductDAO.findById(v.getProduct().getId()), v.getQuantity()));
+        }
+        OrderDAO.createOrder(userId, modelCart);
     }
 
     private static void validateProduct(String name, double price, int stock)
