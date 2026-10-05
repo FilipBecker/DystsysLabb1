@@ -16,6 +16,15 @@ import java.util.List;
 
 import java.io.IOException;
 
+/**
+ * Serlvet responsible for handling the shopping cart
+ *
+ * the serlvet allowes the user to view their cart, add products, clear the cart and place orders
+ *
+ * The cart is stored in the users's HTTP session and
+ * cart operations are handled through the {@link Facade}.
+ *
+ */
 @WebServlet("/cart")
 public class CartServlet extends HttpServlet {
 
@@ -37,6 +46,18 @@ public class CartServlet extends HttpServlet {
         req.getRequestDispatcher("/cart.jsp").forward(req, resp);
     }
 
+    /**
+     * The supported actions are:
+     *     clear
+     *     placeOrder
+     *     Adding a product
+     *
+     * After a successful operation the user is redirected to the test-product page
+     * @param req the HTTP request containing the cart action and submitted parameters
+     * @param resp the HTTP response
+     * @throws ServletException if a servlet-related error occurs
+     * @throws IOException if an input/output error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
@@ -67,7 +88,7 @@ public class CartServlet extends HttpServlet {
                 return;
             }
 
-            /*List<ViewCartItem>*/ cart = (List<ViewCartItem>) session.getAttribute("cart");
+            cart = (List<ViewCartItem>) session.getAttribute("cart");
 
             if(cart == null || cart.isEmpty()){
                 session.setAttribute("error", "Your cart is empty");
@@ -94,7 +115,7 @@ public class CartServlet extends HttpServlet {
         /*
         Add product to cart
         */
-        /*List<ViewCartItem> */cart = (List<ViewCartItem>) session.getAttribute("cart");
+        cart = (List<ViewCartItem>) session.getAttribute("cart");
         if(cart == null) cart = new ArrayList<>();
 
         try{
